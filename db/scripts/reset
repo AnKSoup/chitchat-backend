@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# Variables
+PROJECT_NAME="backend" #change this to the name of the project directory
+
+# cd to db directory, exit if fails
+cd "${PWD%%"$PROJECT_NAME"*}"$PROJECT_NAME/db || exit
+
+# Gets arguments
+ARGS=("$@")
+
+case "$1" in
+-a)
+  # Reset all the tables
+  $PWD/scripts/drop -a
+  $PWD/scripts/create
+  ;;
+-t)
+  # Reset all the given tables
+  for ARG in "${ARGS[@]:1}";do
+    sqlite3 chitchat.db "DROP TABLE IF EXISTS $ARG"
+    sqlite3 chitchat.db ".read tables/$ARG.sql"
+  done
+  ;;
+*) echo "use -a for all or -t TABLE TABLE..."
+  ;;
+esac

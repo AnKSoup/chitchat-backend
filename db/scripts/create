@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# Variables
+PROJECT_NAME="backend" #change this to the name of the project directory
+
+# cd to db directory, exit if fails
+cd "${PWD%%"$PROJECT_NAME"*}"$PROJECT_NAME/db || exit
+
+# Read all the files in the table directory
+for i in tables/*; do
+    sqlite3 chitchat.db ".read $i"
+done

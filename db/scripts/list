@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# Variables
+PROJECT_NAME="backend" #change this to the name of the project directory
+
+# cd to db directory, exit if fails
+cd "${PWD%%"$PROJECT_NAME"*}"$PROJECT_NAME/db || exit
+
+# Gets arguments
+ARGS=("$@")
+
+case "$1" in
+"")
+  sqlite3 chitchat.db ".table"
+  ;;
+-s)
+# List all the given tables
+  for ARG in "${ARGS[@]:1}";do
+    sqlite3 chitchat.db ".schema $ARG" 
+  done
+  ;;
+-sa)
+  sqlite3 chitchat.db ".schema"
+  ;;
+*) echo "No flags to list tables, -sa /-s TABLE TABLE... to list with schema"
+  ;;
+esac

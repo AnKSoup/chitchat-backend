@@ -1,0 +1,6 @@
+#!/bin/bash
+
+echo "CREATE   TABLES   ./db/scripts/create"
+echo "  DROP   TABLES   ./db/scripts/drop"
+echo " RESET   TABLES   ./db/scripts/reset"
+echo "  LIST   TABLES   ./db/scripts/list"
