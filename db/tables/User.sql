@@ -4,5 +4,5 @@ CREATE TABLE IF NOT EXISTS User (
     user_hashed_password VARCHAR(255) NOT NULL,
     user_email VARCHAR(255) NOT NULL,
     user_token TEXT,
-    user_creation_date DATETIME DEFAULT CURRENT_TIMESTAMP
+    user_created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );

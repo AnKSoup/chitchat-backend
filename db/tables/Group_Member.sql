@@ -1,0 +1,9 @@
+CREATE TABLE IF NOT EXISTS Group_Member (
+    user_id INTEGER NOT NULL,
+    conversation_id INTEGER NOT NULL,
+    joined_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    left_at DATETIME,
+    FOREIGN KEY (user_id) REFERENCES User (user_id) ON DELETE CASCADE,
+    FOREIGN KEY (conversation_id) REFERENCES Conversation (conversation_id) ON DELETE CASCADE
+);
+-- If user or conversation gets deleted -> delete this linker
