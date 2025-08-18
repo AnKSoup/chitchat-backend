@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# Variables
+PROJECT_NAME="backend" #change this to the name of the project directory
+
+# cd to db directory, exit if fails
+cd "${PWD%%"$PROJECT_NAME"*}"$PROJECT_NAME/db || exit
+
+#Ask for a db password and stores it in a variable
+printf "Enter password for the DB: \n"
+read -r PASSWORD
+
+# Dump the DB into a sql script
+sqlite3 chitchat.db ".dump" > tmp.sql
+
+# Creates the encrypted db
+sqlcipher tmp.db -cmd "PRAGMA key=$PASSWORD" ".read tmp.sql" || exit
+
+# Deletes unencrypted db and script
+rm chitchat.db
+rm tmp.sql
+
+# renames the newly encrypted db
+mv tmp.db chitchat.db
+
+echo -e "DB successfully encrypted with password: \033[1;33m$PASSWORD"
+echo -e "\033[1;31mWARNING: Note that any of the other 'db/scripts' wont work from now on."

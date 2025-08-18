@@ -1,6 +1,9 @@
 #!/bin/bash
 
-echo "CREATE   TABLES   ./db/scripts/create"
-echo "  DROP   TABLES   ./db/scripts/drop"
-echo " RESET   TABLES   ./db/scripts/reset"
-echo "  LIST   TABLES   ./db/scripts/list"
+echo " CREATE    TABLES    ./db/scripts/create"
+echo "   DROP    TABLES    ./db/scripts/drop"
+echo "  RESET    TABLES    ./db/scripts/reset"
+echo "   LIST    TABLES    ./db/scripts/list"
+echo "-----------------------------------------"
+echo "ENCRYPT   DATABASE   ./db/scripts/encrypt"
+echo -e "\033[1;31mWARNING: Will disable the other scripts from working."
