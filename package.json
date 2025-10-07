@@ -3,16 +3,16 @@
   "version": "1.0.0",
   "main": "./dist/app.js",
   "scripts": {
-    "dev": "tsc -w & nodemon"
+    "dev": "tsc -w & nodemon",
+    "db-dev": "tsc -w & nodemon dist/dbconnect.js"
   },
   "author": "",
   "license": "ISC",
   "description": "",
+  "type": "module",
   "dependencies": {
-    "@journeyapps/sqlcipher": "^5.3.1",
     "dotenv": "^17.2.1",
-    "express": "^5.1.0",
-    "sqlite3": "^5.1.7"
+    "express": "^5.1.0"
   },
   "devDependencies": {
     "@types/express": "^5.0.3",
