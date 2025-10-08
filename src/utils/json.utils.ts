@@ -1,4 +1,3 @@
-
 // Jsonifies a string returned by a SELECT query. 
 // RETURNS: a string, an array<object> or an object. 
 export function jsonifySelect(string: string) {
@@ -6,22 +5,31 @@ export function jsonifySelect(string: string) {
     const keys = rows[0]?.split("|");                       // Stores the first row as keys.
 
     if (rows.length < 2) {                                  // RETURNS if empty.
-        return "ERROR: Empty";
+        return "Error: Empty query result.";
 
     } else if (rows.length > 2) {                           // If multiple results: 
         let result = new Array();                               // Declares an empty array to store the final result.
         for (let i = 1; i < rows.length; i++) {                 // Iterates through rows.
             const values = rows[i]?.split("|");                 // Stores each value of the current row.
-            if (keys != undefined && values != undefined) {     // Typescript moment..
-                result.push(arraysToJSON(keys, values));        // Push a JSON object into the final result array.
+            try {
+                if (keys != undefined && values != undefined) { // Typescript moment..
+                    result.push(arraysToJSON(keys, values));    // Push a JSON object into the final result array.
+                }
+            } catch (error: any) {
+                return error.message
             }
+
         }
         return result;                                          // RETURNS an array of JSON.
 
     } else {                                                // If one result:
-        const values = rows[1]?.split("|");                     // Stores each value of the row.
-        if (keys != undefined && values != undefined) {         // Typescript moment..
-            return arraysToJSON(keys, values);                  // RETURNS a JSON.  
+        const values = rows[1]?.split("|");                 // Stores each value of the row.
+        try {
+            if (keys != undefined && values != undefined) { // Typescript moment..
+                return arraysToJSON(keys, values);          // RETURNS a JSON.  
+            }
+        } catch (error: any) {
+            return error.message
         }
     }
 }
@@ -33,5 +41,10 @@ function arraysToJSON(arrKey: Array<string>, arrVal: Array<string>) {
     for (let i = 0; i < arrKey.length; i++) {               // Iterates through values.
         instance.push(`"${arrKey[i]}": "${arrVal[i]}"`);    // Push a "key": "value" into the instance array.
     }
-    return JSON.parse(`{ ${instance.join(",")} }`);         // RETURNS a JSON.
+    try {
+        return JSON.parse(`{ ${instance.join(",")} }`);     // RETURNS a JSON.
+    } catch (error) {
+        throw error;
+    }
+
 }
