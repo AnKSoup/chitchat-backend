@@ -4,7 +4,7 @@
   "main": "./dist/app.js",
   "scripts": {
     "dev": "tsc -w & nodemon",
-    "db-dev": "tsc -w & nodemon dist/dbconnect.js"
+    "db-dev": "tsc -w & nodemon dist/utils/db/CONNECTutils.js"
   },
   "author": "",
   "license": "ISC",
