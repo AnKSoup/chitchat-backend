@@ -4,7 +4,6 @@
 import path from 'path';
 import 'dotenv/config';
 import { execSync } from "child_process";
-// import { SELECT } from './select.utils.js'
 // Get paths:
 const rootPath = path.resolve('./');
 const dbPath = rootPath + process.env.DB_PATH;
@@ -22,7 +21,4 @@ export function dbQuery(query) {
     }
 }
 // ### TEST HERE ###
-// console.log(SELECT(['*'], 'User'));
-// console.log(SELECT(['*'], 'User', ['user_id > 2', 'user_id < 13']));
-// console.log(SELECT(['user_id, user_name'], 'User', undefined, 1))
 //# sourceMappingURL=connect.utils.js.map

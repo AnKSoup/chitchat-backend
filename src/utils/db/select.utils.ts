@@ -2,6 +2,8 @@
 
 import { dbQuery } from './connect.utils.js'
 import { jsonifySelect } from '../json.utils.js';
+import { isOnlyWord, isOnlyQuery } from '../validation.utils.js';
+import { error } from 'console';
 
 export function SELECT(columns: Array<string>, table: string, conditions?: Array<string>, limit?: number) {
     let query = `SELECT ${columns.join(', ')} FROM ${table}`;
@@ -14,10 +16,12 @@ export function SELECT(columns: Array<string>, table: string, conditions?: Array
     query += ';'
 
     try {
-        return jsonifySelect(dbQuery(query));
+        if (isOnlyWord('SELECT', query) && isOnlyQuery(query)) {
+            return jsonifySelect(dbQuery(query));
+        } else {
+            return "Error, More than one Query";
+        }
     } catch (error: any) {
         return error.message
     }
 }
-
-// Warning: risk of sql injection with the conditions array. 
