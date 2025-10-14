@@ -1,9 +1,8 @@
 // ### SELECT ... ###
 
-import { dbQuery } from './connect.utils.js'
+import { dbQuery } from './connect.utils.js';
 import { jsonifySelect } from '../json.utils.js';
 import { isOnlyWord, isOnlyQuery } from '../validation.utils.js';
-import { error } from 'console';
 
 export function SELECT(columns: Array<string>, table: string, conditions?: Array<string>, limit?: number) {
     let query = `SELECT ${columns.join(', ')} FROM ${table}`;
