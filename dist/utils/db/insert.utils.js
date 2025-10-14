@@ -1,20 +1,9 @@
 import { dbQuery } from './connect.utils.js';
 import { isOnlyWord, isOnlyQuery } from '../validation.utils.js';
-// Inserts a JSON in a Selected table.
+import { betterStrings } from '../json.utils.js';
+// Inserts a JSON in a given table.
 export function INSERT(table, object) {
-    let values = Object.values(object); //Gets values.
-    if (values) {
-        for (let i = 0; i < values.length; i++) { //Iterates through values.
-            if (typeof values[i] == 'string') { //If string:
-                if (values[i].search("'") != -1) { //If contains "'""
-                    values.splice(i, 1, values[i].replaceAll("'", "''")); //Replace with "\'"
-                }
-                values.splice(i, 1, `'${values[i]}'`); //string becomes "string"
-            }
-        }
-    }
-    // Creates and excecutes query:
-    const query = `INSERT INTO ${table} (${Object.keys(object).join(', ')}) VALUES (${Object.values(values).join(', ')});`;
+    const query = `INSERT INTO ${table} (${Object.keys(object).join(', ')}) VALUES (${betterStrings(Object.values(object)).join(', ')});`;
     try {
         if (isOnlyWord('INSERT', query) && isOnlyQuery(query)) {
             return dbQuery(query);

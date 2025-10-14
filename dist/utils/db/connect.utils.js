@@ -4,8 +4,6 @@
 import path from 'path';
 import 'dotenv/config';
 import { execSync } from "child_process";
-import { INSERT } from './insert.utils.js';
-import { SELECT } from './select.utils.js';
 // Get paths:
 const rootPath = path.resolve('./');
 const dbPath = rootPath + process.env.DB_PATH;
@@ -23,21 +21,4 @@ export function dbQuery(query) {
     }
 }
 // ### TEST HERE ###
-const testObj = {
-    user_name: 'MrREQUIN ;',
-    user_hashed_password: 'AAAAA',
-    user_email: 'requin@requin.requin',
-};
-const testObj2 = {
-    user_name: 'MrLOUTRE',
-    user_hashed_password: 'AAAAA',
-    user_email: 'loutre@loutre.loutre',
-};
-const testObj3 = {
-    user_name: "Mr'LOUTRE",
-    user_hashed_password: 'AAAAA',
-    user_email: 'loutre@loutre.loutre',
-};
-console.log(INSERT('Uaser', testObj));
-console.log(SELECT(['*'], 'User', ['user_id > 12']));
 //# sourceMappingURL=connect.utils.js.map

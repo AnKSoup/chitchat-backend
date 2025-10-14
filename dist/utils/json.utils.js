@@ -47,4 +47,19 @@ function arraysToJSON(arrKey, arrVal) {
         throw error;
     }
 }
+// RETURNS an array if string then becomes 'string'
+export function betterStrings(array) {
+    let values = array; //Gets values.
+    if (values) {
+        for (let i = 0; i < values.length; i++) { //Iterates through values.
+            if (typeof values[i] == 'string') { //If string:
+                if (values[i].search("'") != -1) { //If contains "'""
+                    values.splice(i, 1, values[i].replaceAll("'", "''")); //Replace with "\'"
+                }
+                values.splice(i, 1, `'${values[i]}'`); //string becomes "string"
+            }
+        }
+    }
+    return values;
+}
 //# sourceMappingURL=json.utils.js.map
