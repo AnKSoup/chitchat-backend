@@ -24,8 +24,8 @@ WARNING: Will disable the other scripts from working.
 *SELECT(columns: Array<string>, table: string, conditions?: Array<string>, limit?: number)* from */utils/db/select.utils.ts*:<br />
   Executes a SELECT query with sql injection prevention and returns a JSON: <br />
     Examples: <br />
-      - *SELECT(['*'], 'User')* => SELECT * FROM User;<br />
-      - *SELECT(['*'], 'User', undefined, 3)* => SELECT * FROM User LIMIT 3;<br />
+      - *SELECT(['\*'], 'User')* => SELECT * FROM User;<br />
+      - *SELECT(['\*'], 'User', undefined, 3)* => SELECT * FROM User LIMIT 3;<br />
       - *SELECT(['user_id','user_name'], 'User', ['user_id > 1',"user_name LIKE '%Jean%'", 2])* => SELECT user_id, user_name FROM User WHERE user_id > 1 AND <br />user_name LIKE '%Jean%' LIMIT 2;
 
 *UPDATE(table: string, object: Object, conditions: Array<string>)* from */utils/db/update.utils.ts*:<br />
