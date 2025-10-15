@@ -1,7 +1,7 @@
-## DATABASE :
+# DATABASE :
 (Homemade framework..)
 
-# Set up:
+## Set up:
 Using **sqlite3** with **sqlcipher** encryption.
 Tables go in ./db/tables.
 
@@ -14,7 +14,7 @@ run ./db/help to get a list of available scripts :
 ENCRYPT   DATABASE   ***./db/scripts/encrypt***
 WARNING: Will disable the other scripts from working.
 
-# Communicate with db:
+## Communicate with db:
 ***dbQuery(string: string)*** from */utils/db/connect.utils.ts*:<br />
   Executes a query, returns a string.
 
@@ -34,7 +34,7 @@ WARNING: Will disable the other scripts from working.
 ***DELETE(table: string, conditions: Array<string>)*** from */utils/db/delete.utils.ts*:<br />
   DELETEs rows from table with conditions and sql injection prevention.
 
-# Preventing sql injections:
+## Preventing sql injections:
 ***isOnlyWord(word: string, string: string)*** from */utils/validation.utils.ts*:<br />
   Returns true if word matches string and no other query words present.<br />
 ***isOnlyFirstWord(string: string)*** from */utils/validation.utils.ts* :<br />
@@ -44,7 +44,7 @@ WARNING: Will disable the other scripts from working.
 ***isOnlyQuery(string: string)*** from */utils/validation.utils.ts*:<br />
   Returns true if only one query executed.
 
-# Formating utilities:
+## Formating utilities:
 ***jsonifySelect(string: string)*** from */utils/json.utils.ts*: <br />
   Takes in a string and returns a JSON object (SELECT queries only).<br />
 ***betterStrings(array: Array<any>)*** from */utils/json.utils.ts*:<br />
