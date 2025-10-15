@@ -4,32 +4,22 @@ export function jsonifySelect(string) {
     const rows = string.split("\n"); // Splits the query output by rows.
     const keys = rows[0]?.split("|"); // Stores the first row as keys.
     if (rows.length < 2) { // RETURNS if empty.
-        return "Error: Empty query result.";
+        throw new Error("Error: Empty query result");
     }
     else if (rows.length > 2) { // If multiple results: 
         let result = new Array(); // Declares an empty array to store the final result.
         for (let i = 1; i < rows.length; i++) { // Iterates through rows.
             const values = rows[i]?.split("|"); // Stores each value of the current row.
-            try {
-                if (keys != undefined && values != undefined) { // Typescript moment..
-                    result.push(arraysToJSON(keys, values)); // Push a JSON object into the final result array.
-                }
-            }
-            catch (error) {
-                return error.message;
+            if (keys != undefined && values != undefined) { // Typescript moment..
+                result.push(arraysToJSON(keys, values)); // Push a JSON object into the final result array.
             }
         }
         return result; // RETURNS an array of JSON.
     }
     else { // If one result:
         const values = rows[1]?.split("|"); // Stores each value of the row.
-        try {
-            if (keys != undefined && values != undefined) { // Typescript moment..
-                return arraysToJSON(keys, values); // RETURNS a JSON.  
-            }
-        }
-        catch (error) {
-            return error.message;
+        if (keys != undefined && values != undefined) { // Typescript moment..
+            return arraysToJSON(keys, values); // RETURNS a JSON.  
         }
     }
 }
@@ -40,12 +30,7 @@ function arraysToJSON(arrKey, arrVal) {
     for (let i = 0; i < arrKey.length; i++) { // Iterates through values.
         instance.push(`"${arrKey[i]}": "${arrVal[i]}"`); // Push a "key": "value" into the instance array.
     }
-    try {
-        return JSON.parse(`{ ${instance.join(",")} }`); // RETURNS a JSON.
-    }
-    catch (error) {
-        throw error;
-    }
+    return JSON.parse(`{ ${instance.join(",")} }`); // RETURNS a JSON.
 }
 // RETURNS an array if string then becomes 'string'
 export function betterStrings(array) {

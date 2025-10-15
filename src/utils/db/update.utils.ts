@@ -14,13 +14,10 @@ export function UPDATE(table: string, object: Object, conditions: Array<string>)
 
     query += ` WHERE ${conditions.join(' AND ')};`              //Adds the conditions.
 
-    try {                                                       //Executes the query.
-        if (isOnlyQuery(query)) {
-            return dbQuery(query);
-        } else {
-            return "Error, More than one Query";
-        }
-    } catch (error: any) {
-        return error.message
+    if (isOnlyQuery(query)) {                                   //Executes the query.
+        return dbQuery(query);
+    } else {
+        throw new Error("Error: More than one Query");
     }
+
 }

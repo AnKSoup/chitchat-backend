@@ -1,17 +1,12 @@
 import { dbQuery } from './connect.utils.js';
-import { isOnlyWord, isOnlyQuery } from '../validation.utils.js';
+import { isOnlyQuery } from '../validation.utils.js';
 export function DELETE(table, conditions) {
     const query = ` DELETE FROM ${table} WHERE ${conditions.join(' AND ')};`;
-    try {
-        if (isOnlyWord('DELETE', query) && isOnlyQuery(query)) {
-            return dbQuery(query);
-        }
-        else {
-            return "Error, More than one Query";
-        }
+    if (isOnlyQuery(query)) {
+        return dbQuery(query);
     }
-    catch (error) {
-        return error.message;
+    else {
+        throw new Error("Error: More than one Query");
     }
 }
 //# sourceMappingURL=delete.utils.js.map

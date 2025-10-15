@@ -20,5 +20,4 @@ export function dbQuery(query) {
         return error.message;
     }
 }
-// ### TEST HERE ###
 //# sourceMappingURL=connect.utils.js.map

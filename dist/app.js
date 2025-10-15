@@ -2,6 +2,8 @@ import { createRequire as _createRequire } from "module";
 const __require = _createRequire(import.meta.url);
 const Express = __require("express");
 import 'dotenv/config';
+//Routers:
+import { routeUser } from "./routes/user.js";
 // Init app:
 const app = Express();
 const port = process.env.PORT;
@@ -11,4 +13,6 @@ app.listen(port, () => {
 app.get('/', (req, res) => {
     res.send('eloo chitchat');
 });
+//Routers:
+app.use('/user', routeUser);
 //# sourceMappingURL=app.js.map
