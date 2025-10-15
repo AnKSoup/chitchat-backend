@@ -2,7 +2,7 @@
 
 import { dbQuery } from './connect.utils.js';
 import { jsonifySelect } from '../json.utils.js';
-import { isOnlyWord, isOnlyQuery } from '../validation.utils.js';
+import { isOnlyQuery } from '../validation.utils.js';
 
 export function SELECT(columns: Array<string>, table: string, conditions?: Array<string>, limit?: number) {
     let query = `SELECT ${columns.join(', ')} FROM ${table}`;
@@ -15,7 +15,7 @@ export function SELECT(columns: Array<string>, table: string, conditions?: Array
     query += ';'
 
     try {
-        if (isOnlyWord('SELECT', query) && isOnlyQuery(query)) {
+        if (isOnlyQuery(query)) {
             return jsonifySelect(dbQuery(query));
         } else {
             return "Error, More than one Query";

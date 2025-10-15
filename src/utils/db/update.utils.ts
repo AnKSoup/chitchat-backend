@@ -1,5 +1,5 @@
 import { dbQuery } from './connect.utils.js';
-import { isOnlyWord, isOnlyQuery } from '../validation.utils.js';
+import { isOnlyQuery } from '../validation.utils.js';
 import { betterStrings } from '../json.utils.js';
 
 export function UPDATE(table: string, object: Object, conditions: Array<string>) {
@@ -15,7 +15,7 @@ export function UPDATE(table: string, object: Object, conditions: Array<string>)
     query += ` WHERE ${conditions.join(' AND ')};`              //Adds the conditions.
 
     try {                                                       //Executes the query.
-        if (isOnlyWord('UPDATE', query) && isOnlyQuery(query)) {
+        if (isOnlyQuery(query)) {
             return dbQuery(query);
         } else {
             return "Error, More than one Query";

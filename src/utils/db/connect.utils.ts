@@ -23,5 +23,3 @@ export function dbQuery(query: string) {
         return error.message;
     }
 }
-
-// ### TEST HERE ###
