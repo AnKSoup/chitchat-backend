@@ -1,5 +1,4 @@
 .env
 .vscode
 chitchat.db
-test-data
 node_modules

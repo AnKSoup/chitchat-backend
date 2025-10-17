@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS Message (
     message_id INTEGER PRIMARY KEY,
-    message_hashed_content TEXT NOT NULL,
+    message_content TEXT NOT NULL,
     message_sent_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     message_modified_at DATETIME,
     user_id INTEGER,

@@ -1,4 +1,5 @@
 import Express = require("express");
+import { urlencoded } from "express";
 import 'dotenv/config';
 
 //Routers:
@@ -6,15 +7,15 @@ import { routeUser } from "./routes/user.js";
 
 // Init app:
 const app = Express();
-const port = process.env.PORT;
+const host = process.env.APP_HOST;
+const port = process.env.APP_PORT;
 
 app.listen(port, () => {
-    console.log(`Server listening at http://localhost:${port}`);
+    console.log(`Server listening at ${host}:${port}`);
 });
 
-app.get('/', (req, res) => {
-    res.send('eloo chitchat')
-});
+//Middlewares;
+app.use(urlencoded({ extended: true })); //To get infos from forms.
 
 //Routers:
 app.use('/user', routeUser);

@@ -1,3 +1,4 @@
+import { SELECT } from "./db/select.utils.js";
 // ### TO PREVENT INJECTIONS ###
 const queryWords = ["SELECT", "INSERT", "UPDATE", "DELETE"];
 // Blacklist other except ...
@@ -32,5 +33,68 @@ export function isOnlyQuery(string) {
     }
     else
         return false;
+}
+// ### TO PREVENT UNWANTED BODY PARAMS ###
+export function allowOnly(object, array) {
+    const obj = Object.keys(object); //Gets values.
+    const arr = array;
+    if (obj.length != arr.length) { //If not same length:
+        return false; //Returns false
+    }
+    for (let i = 0; i < obj.length; i++) { //Iterates through each value of obj:
+        let found = false; //No matches found until proven otherwise. 
+        for (let j = 0; j < arr.length; j++) { //Iterates through each value of arr:
+            if (obj[i] == arr[j]) { //Am I the same?
+                found = true; //found is changed to yes.
+                break; //Breaks.
+            }
+            ;
+        }
+        if (!found) { //Is not found?
+            return false; //Returns false.
+        }
+    }
+    return true; //Returns true since everything matched!
+}
+export function prevents(object, array) {
+    const obj = Object.keys(object); //Gets values.
+    const arr = array;
+    for (let i = 0; i < obj.length; i++) { //Iterates through each value of obj:
+        for (let j = 0; j < arr.length; j++) { //Iterates through each value of arr:
+            if (obj[i] == arr[j]) { //Am I the same?
+                return true; //Returns true => undesired value found!
+            }
+        }
+    }
+    return false; //Returns false => nothing wrong found.
+}
+// ### TO VALIDATE USER TOKEN ###
+//Returns user_id or undefined  
+export function getUserID(token) {
+    try {
+        const user_id = SELECT(['user_id'], 'User', [`user_token LIKE '${token}'`]).user_id;
+        return user_id;
+    }
+    catch (error) {
+        return undefined;
+    }
+}
+//Returns false if token not found.
+export function isTokenValid(token) {
+    if (!getUserID(token)) {
+        return false;
+    }
+    else {
+        return true;
+    }
+}
+//Returns true if token belongs to id.
+export function isTokenOfID(token, id) {
+    if (getUserID(token) == id) {
+        return true;
+    }
+    else {
+        return false;
+    }
 }
 //# sourceMappingURL=validation.utils.js.map
