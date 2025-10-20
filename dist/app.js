@@ -5,6 +5,7 @@ import { urlencoded } from "express";
 import 'dotenv/config';
 //Routers:
 import { routeUser } from "./routes/user.js";
+import { routeConversation } from "./routes/converstation.js";
 // Init app:
 const app = Express();
 const host = process.env.APP_HOST;
@@ -16,4 +17,5 @@ app.listen(port, () => {
 app.use(urlencoded({ extended: true })); //To get infos from forms.
 //Routers:
 app.use('/user', routeUser);
+app.use('/conversation', routeConversation);
 //# sourceMappingURL=app.js.map

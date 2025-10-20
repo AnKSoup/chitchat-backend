@@ -4,6 +4,7 @@ import 'dotenv/config';
 
 //Routers:
 import { routeUser } from "./routes/user.js";
+import { routeConversation } from "./routes/converstation.js";
 
 // Init app:
 const app = Express();
@@ -19,3 +20,4 @@ app.use(urlencoded({ extended: true })); //To get infos from forms.
 
 //Routers:
 app.use('/user', routeUser);
+app.use('/conversation', routeConversation);

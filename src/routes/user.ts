@@ -1,10 +1,12 @@
 import { Router } from 'express';
 import bcrypt from 'bcrypt';
+
 import { SELECT } from "../utils/db/select.utils.js";
 import { INSERT } from '../utils/db/insert.utils.js';
 import { UPDATE } from '../utils/db/update.utils.js';
-import { allowOnly, getUserID, isTokenOfID, prevents } from '../utils/validation.utils.js';
 import { DELETE } from '../utils/db/delete.utils.js';
+
+import { allowOnly, getUserID, isTokenOfID, prevents } from '../utils/validation.utils.js';
 
 /*
 TODO implements : Reset password:
