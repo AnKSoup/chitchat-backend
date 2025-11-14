@@ -1,86 +1,148 @@
 # DATABASE :
+
 (Homemade framework..)
 
 ## Set up:
+
 Using **sqlite3** with **sqlcipher** encryption.
 Tables go in ./db/tables.
 
 run ./db/help to get a list of available scripts :
- CREATE    TABLES    ***./db/scripts/create***<br />
-   DROP    TABLES    ***./db/scripts/drop***    (-a / -t TABLE TABLE...)<br />
-  RESET    TABLES    ***./db/scripts/reset***   (-a / -t TABLE TABLE...)<br />
-   LIST    TABLES    ***./db/scripts/list***    ("" / -sa / -s TABLE TABLE...)
+CREATE TABLES **_./db/scripts/create_**<br />
+DROP TABLES **_./db/scripts/drop_** (-a / -t TABLE TABLE...)<br />
+RESET TABLES **_./db/scripts/reset_** (-a / -t TABLE TABLE...)<br />
+LIST TABLES **_./db/scripts/list_** ("" / -sa / -s TABLE TABLE...)
 
-ENCRYPT   DATABASE   ***./db/scripts/encrypt***
+ENCRYPT DATABASE **_./db/scripts/encrypt_**
 WARNING: Will disable the other scripts from working.
 
-## Communicate with db:
-***dbQuery(string: string)*** from */src/utils/db/connect.utils.ts*:<br />
-  Executes a query, returns a string.
+# Internal Response Object (IRO).
 
-***INSERT(table: string, object: Object)*** from */src/utils/db/insert.utils.ts*:<br />
-  INSERTs a JSON object in a given table with sql injection prevention.
+This project uses internal messages and responses formated as objects that each "operations" return.
+=> Helps checking for success and easier response for the API.
 
-***SELECT(columns: Array<string>, table: string, conditions?: Array<string>, limit?: number)*** from */src/utils/db/select.utils.ts*:<br />
-  Executes a SELECT query with sql injection prevention and returns a JSON: <br />
-    Examples: <br />
-      - *SELECT(['\*'], 'User')* => SELECT * FROM User;<br />
-      - *SELECT(['\*'], 'User', undefined, 3)* => SELECT * FROM User LIMIT 3;<br />
-      - *SELECT(['user_id','user_name'], 'User', ['user_id > 1',"user_name LIKE '%Jean%'", 2])* => SELECT user_id, user_name FROM User WHERE user_id > 1 AND <br />user_name LIKE '%Jean%' LIMIT 2;
+Here is the following template:
 
-***UPDATE(table: string, object: Object, conditions: Array<string>)*** from */src/utils/db/update.utils.ts*:<br />
-  UPDATEs a JSON object in a given table with conditions and sql injection prevention.
+**IRO CTOR** : {
+success: boolean,
+title: string,
+status: number,
+detail: string,
+content?: object
+}
 
-***DELETE(table: string, conditions: Array<string>)*** from */src/utils/db/delete.utils.ts*:<br />
-  DELETEs rows from table with conditions and sql injection prevention.
-
-## Preventing sql injections:
-***isOnlyWord(word: string, string: string)*** from */src/utils/validation.utils.ts*:<br />
-  Returns true if word matches string and no other query words present.<br />
-***isOnlyFirstWord(string: string)*** from */src/utils/validation.utils.ts* :<br />
-  Same thing but first word is auto detected.<br />
-[**WARNING**: isOnlyWord() and isOnlyFirstWord() not being used => delete?]
-
-***isOnlyQuery(string: string)*** from */src/utils/validation.utils.ts*:<br />
-  Returns true if only one query executed.
+(Internal messages where removed to use the api response template for easier retuns).
 
 # ROUTES
 
 ## /user/
-**user.ts** from *src/routes/user.ts*
+
+**user.ts** from _src/routes/user.ts_
 
 ### ENDPOINTS:
-**POST**    */user/*                  REQ: {user_name, user_email, user_password}                         RES: {message}<br />
-**POST**    */user/login*             REQ: {user_email, user_password}                                    RES: {message|user_token}<br />
-**POST**    */user/logout*            REQ: {user_token}                                                   RES: {message}<br />
-**GET**     */user/:id*                                                                                   RES: {user_name|message}<br /> 
-**PUT**     */user/:id*               REQ: {user_token, ..., !user_id, !user_password, !user_created_at}  RES: {message}<br />
-**DELETE**  */user/:id*               REQ: {user_token}                                                   RES: {message}<br />
-**GET**     */user/get_id*            REQ: {user_token}                                                   RES: {user_id|message}<br />
-**GET**     */user/search/:username*                                                                      RES: {user_id, user_name|message}<br />
-**PUT**     */user/change_pass/:id*   REQ: {user_token, user_password}                                    RES: {message}<br />
 
-# Additional tools: 
+**POST** */user/* REQ: {user_name, user_email, user_password}<br />
+**POST** */user/login* REQ: {user_email, user_password} RES: user_token<br />
+**POST** */user/logout* REQ: {user_token} <br />
+<!-- **GET** */user/:id* RES: user_name<br /> -->
+**PUT** */user/:id* REQ: {user_token, ..., !user_id, !user_password, !user_created_at}<br />
+**DELETE** */user/:id* REQ: {user_token} <br />
+**GET** */user/get_id* REQ: {user_token} user_id<br />
+**GET** */user/search/:username* RES: {user_id, user_name}<br />
+**PUT** */user/change_pass/:id* REQ: {user_token, user_password} <br />
 
-## Formating utilities:
-***jsonifySelect(string: string)*** from */src/utils/json.utils.ts*: <br />
-  Takes in a string and returns a JSON object (SELECT queries only).<br />
-***betterStrings(array: Array<any>)*** from */src/utils/json.utils.ts*:<br />
-  Takes in an array and returns the same array with its strings encapsulated in single quotation marks.
+# Services :
 
-***escapeChar(char: string, string: string)*** from */src/utils/bash.utils.ts*<br />
-  Escapes a char, only used with '$' right now.
+## DB
 
-## Allowing/ Rejecting body keys:
-***allowOnly(object: Object, array: Array<string>)*** from *src/utils/validation.utils.ts*:<br />
-  Returns false if finds an unwanted key in a given object.<br />
-***prevents(object: Object, array: Array<string>)*** from *src/utils/validation.utils.ts*:<br />
-  Returns true if finds unwanted keys in a given object. 
+- _src/services/db/queries.service.ts_
+  Handles connection and basic CRUD operation with the database.
 
-## Validating tokens:
-***getUserID(token: string)*** from *src/utils/validation.utils.ts*:<br />
-  Returns user_id or undefined.<br />
-***function isTokenValid(token: string)*** from *src/utils/validation.utils.ts*:<br />
-  Returns true if given token is in the db.<br />
-***function isTokenOfID(token: string, id: any)*** from *src/utils/validation.utils.ts*:<br />
-  Returns true if given token is equal to the token of the given id. 
+  **dbOpen()**: Returns a connection to the database.
+  _async_ **dbUnlock()**: Returns a Promise, attempts to log in the database using the pragma key.
+  _async_ **dbRun()**: Returns a Promise, attempts to execute a prepared "run" statement in the db.
+
+  Basic CRUD:
+  _async_ **dbSelect()**: Returns a Promise, attemps to retrieve data from the db.
+  _async_ **dbInsert()**: Returns a Promise, attemps to insert data into the db.
+  _async_ **dbUpdate()**: Returns a Promise, attemps to update data from the db.
+  _async_ **dbDelete()**: Returns a Promise, attemps to delete data from the db.
+
+- _src/services/db/user.service.ts_
+  Handles communication with user table implementing the logic needed.
+
+  Basic CRUD:
+  _async_ **getUser()**: Returns an "Internal Response Object" : "R".
+  _async_ **createUser()**: Returns an IRO : "C".
+  _async_ **updateUser()**: Returns an IRO : "U".
+  _async_ **deleteUser()**: Returns an IRO : "D".
+
+  Data Utils:
+  **usersToArray()**: Returns an Array of Objects: to easily use the content from an IRO retrieved by getUser().
+  _async_ **emailToPassword()**: Returns an IRO : With corresponding password in content. Also helps checking if a user exists with its email.
+  _async_ **idToPassword()**: Returns an IRO : With corresponding password in content.
+
+  Logic:
+  _async_ **signinUser()**: Returns an IRO : Attempts to sign a user in.
+  _async_ **loginUser()**: Returns an IRO : Attempts to log a user in.
+  _async_ **logoutUser()**: Returns an IRO : Attempts to log a user out.
+
+  _async_ **getUserByName()**: Returns an IRO : Attempts to retrieve user(s).
+  _async_ **editUser()**: Returns an IRO : Attempts to edit a user.
+  _async_ **removeUser()**: Returns an IRO : Attempts to remove a user.
+
+  _async_ **updatePassword()**: Returns an IRO : Updates a user password.
+  _async_ **changeUserPassword()**: Returns an IRO : Attempts to change a user password with checks.
+
+## Encryption
+
+- _src/services/encrytption/bcrypt.service.ts_
+  Handles bcrypt operations:
+
+  **encryptPassword()**: Rertunrs a hashed password as a string.
+  **isPasswordCorrect()**: Returns a bool : compares a string to an hashed password.
+  _async_ **validateUserPassword()**: Returns an IRO : Attempts to validate a password.
+
+## Validation
+
+- _src/services/validation/credentials.service.ts_
+  Validates credential:
+
+  **isEmailValid()**: Returns an IRO : validates an email with regex.
+  **isPasswordValid()**: Returns an IRO : validates a password with regex.
+
+- _src/services/validation/operations.service.ts_
+  Easily validate any operation that returns an IRO:
+
+  **opertationToResponse()**: Formats an IRO and sends it throught the API as a response.
+  **validateOperation()**: Does the same but returns true if it fails : so the endpoint can check for a fail easily and return.
+
+- _src/services/validation/params.service.ts_
+  Validates params sent to the API:
+
+  **allowOnly()**: Returns an IRO : allows only defined params.
+  **prevents()**: Returns an IRO : prevents defined params.
+  **isPresent()**: Returns an IRO : succeeds if defined params are found.
+
+## Token
+
+- _src/services/tokens.service.ts_
+  Handles token logic:
+
+  **createToken()**: Returns a generated token as string.
+  _async_ **isTokenValid()**: Returns an IRO : Checks if the token exists in the db. 
+  **isTokenOfUser()**: Returns an IRO : Tells if the id matches the one of the given token.
+
+# Utils :
+
+## Responses
+
+- _src/utils/responses.utils.ts_
+  Handles IRO logic:
+
+  **iro()**: IRO CTOR.
+
+  **getProperty()**: Retrieves a defined property.
+  **getSuccess()**: Returns bool : Easy check for success.
+  **getStatus()**: Returns number : Easy check for status.
+
