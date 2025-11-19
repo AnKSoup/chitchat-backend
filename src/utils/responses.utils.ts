@@ -17,7 +17,7 @@ export function iro(
   };
 }
 
-// To easely check for property. (because typescript..)
+// To easily check for property. (because typescript..)
 export function getProperty(property: string, object: object) {
   if (property in object) {
     const key = property as keyof typeof object; // HUH ??
@@ -30,7 +30,7 @@ export function getSuccess(object: object) {
   return getProperty("success", object) as unknown as boolean;
 }
 
-// To easely check for status. (because typescript..)
+// To easily check for status. (because typescript..)
 export function getStatus(object: object) {
   if ("status" in object) {
     const key = "status" as keyof typeof object; // HUH ??

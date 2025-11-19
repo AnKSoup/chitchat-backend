@@ -1,23 +1,18 @@
 // To quickly validate and send a response using the internal operation response system aka {success : false}...
-
 import { getStatus, getSuccess } from "../../utils/responses.utils.js";
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function operationToResponse(res: any, object: object) {
-  res.status(getStatus(object)).send(object);
+export function operationToResponse(res, object) {
+    res.status(getStatus(object)).send(object);
 }
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function validateOperation(res: any, object: object) {
-  //Checks for success and returns if false.
-  if (!getSuccess(object)) {
-    operationToResponse(res, object);
-    return true;
-  }
+export function validateOperation(res, object) {
+    //Checks for success and returns if false.
+    if (!getSuccess(object)) {
+        operationToResponse(res, object);
+        return true;
+    }
 }
-
 //Not working since it will not prevent other object from being created before being tested
-
 // // Does the same thing in a loop.
 // // eslint-disable-next-line @typescript-eslint/no-explicit-any
 // export function validateOperations(res: any, objects: Array<object>) {
@@ -29,3 +24,4 @@ export function validateOperation(res: any, object: object) {
 //     }
 //   }
 // }
+//# sourceMappingURL=operations.service.js.map

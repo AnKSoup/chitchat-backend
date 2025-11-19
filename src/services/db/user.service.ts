@@ -5,11 +5,18 @@ import {
   encryptPassword,
   isPasswordCorrect,
   validateUserPassword,
-} from "../encrytption/bcrypt.service.js";
+} from "../encryption/bcrypt.service.js";
 import { createToken } from "../tokens.service.js";
-import { dbDelete, dbInsert, dbSelect, dbUpdate } from "./queries.service.js";
+import {
+  createItem,
+  deleteItem,
+  getItems,
+  itemsToArray,
+  updateItem,
+} from "./safe_queries.service.js";
 
 // ## CRUD: ##
+// Delete later only there for backward compatibility
 
 // Get User(s).
 export async function getUser(
@@ -17,82 +24,34 @@ export async function getUser(
   conditions?: Array<string>,
   limit?: number
 ) {
-  try {
-    return await dbSelect(columns, "User", conditions, limit);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  } catch (error) {
-    return iro(
-      false,
-      "No users found.",
-      400,
-      "No users corresponding to query."
-    );
-  }
+  return await getItems(columns, "User", conditions, limit);
 }
 
 // Creates a user with a JSON.
 export async function createUser(user: object) {
-  try {
-    await dbInsert("User", user);
-    return iro(
-      true,
-      "User created.",
-      201,
-      `User ${getProperty("user_name", user)} successfully created.`
-    );
-  } catch (error) {
-    const message = getProperty(
-      "message",
-      error as object
-    ) as unknown as string; //Dont worry typescript it's not null..
-
-    if (message.includes("UNIQUE constraint failed: User.user_email")) {
-      return iro(false, "Couldn't create user.", 400, "Email already in use.");
-    } else {
-      return iro(false, "Couldn't create user.", 500, message);
-    }
+  const result = await createItem("User", user);
+  const message = getProperty("detail", result) as unknown as string;
+  if (message.includes("UNIQUE constraint failed: User.user_email")) {
+    return iro(false, "Couldn't create user.", 400, "Email already in use.");
   }
+  return result;
 }
 
 // Updates user(s) with a JSON and conditions.
 export async function updateUser(user: object, conditions: Array<string>) {
-  try {
-    await dbUpdate("User", user, conditions);
-    return iro(true, "User Updated.", 201, "User successfully updated.");
-  } catch (error) {
-    const message = getProperty(
-      "message",
-      error as object
-    ) as unknown as string; //Dont worry typescript it's not null..
-    return iro(false, "Couldn't update user.", 500, message);
-  }
+  return await updateItem("User", user, conditions);
 }
 
 // Deletes user(s) with conditions.
 export async function deleteUser(conditions: Array<string>) {
-  try {
-    await dbDelete("User", conditions);
-    return iro(true, "User Deleted.", 201, "Deleted user successfully.");
-  } catch (error) {
-    const message = getProperty(
-      "message",
-      error as object
-    ) as unknown as string; //Dont worry typescript it's not null..
-    return iro(false, "Couldn't delete user.", 500, message);
-  }
+  return await deleteItem("User", conditions);
 }
 
 // ## Data Utils: ##
 
 //Use this to convert a "getUser" in an array of users
 export function usersToArray(result: unknown) {
-  if (typeof result === "object" && result != null) {
-    const arr: Array<object> = getProperty(
-      "content",
-      result
-    ) as unknown as Array<object>; //Gets rid of the type "never[]"
-    return arr;
-  }
+  return itemsToArray(result);
 }
 
 //if user exists returns password
@@ -149,7 +108,7 @@ async function idToPassword(id: number) {
       false,
       "No such user.",
       400,
-      "Id provided doesnt exist in database."
+      "Id provided doesn't exist in database."
     );
   }
 }
@@ -251,7 +210,7 @@ export async function removeUser(id: number) {
   return result;
 }
 
-//Attemps to update a password
+//Attempts to update a password
 async function updatePassword(newPass: string, id: number) {
   // Encrypts and updates a given password
   const encrypted = encryptPassword(newPass);
@@ -262,9 +221,9 @@ async function updatePassword(newPass: string, id: number) {
   if (getSuccess(update)) {
     return iro(
       true,
-      "Password succesfully changed.",
+      "Password successfully changed.",
       201,
-      "Succesfully changed to new password please log back in."
+      "Successfully changed to new password please log back in."
     );
   } else {
     return update;

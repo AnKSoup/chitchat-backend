@@ -11,7 +11,7 @@ import {
   isPasswordValid,
 } from "../services/validation/credentials.service.js";
 import {
-  opertationToResponse,
+  operationToResponse,
   validateOperation,
 } from "../services/validation/operations.service.js";
 import {
@@ -69,8 +69,7 @@ routeUser.post("/", async (req, res) => {
 
   //Attempting to sign in user:
   const result = await signinUser(user);
-
-  opertationToResponse(res, result);
+  operationToResponse(res, result);
 });
 
 // #2- Log in:
@@ -83,7 +82,7 @@ routeUser.post("/login", async (req, res) => {
 
   //Attempting to log in user:
   const result = await loginUser(user);
-  opertationToResponse(res, result);
+  operationToResponse(res, result);
 });
 
 // #3- Log out:
@@ -99,7 +98,7 @@ routeUser.post("/logout", async (req, res) => {
 
   //Attempting to log out with the generated token result:
   const result = await logoutUser(token);
-  opertationToResponse(res, result);
+  operationToResponse(res, result);
 });
 
 // //#4- Get by id:
@@ -129,7 +128,7 @@ routeUser.put("/:id", async (req, res) => {
 
   //Attempts to edit user:
   const result = await editUser(user, id);
-  opertationToResponse(res, result);
+  operationToResponse(res, result);
 });
 
 //#6- Deletes user by id:
@@ -149,7 +148,7 @@ routeUser.delete("/:id", async (req, res) => {
 
   //Attempts to remove user:
   const result = await removeUser(id);
-  opertationToResponse(res, result);
+  operationToResponse(res, result);
 });
 
 //#7- GET ID with token:
@@ -162,13 +161,13 @@ routeUser.get("/get_id", async (req, res) => {
 
   //Attempts to retrieve user_id:
   const result = await isTokenValid(req.body.user_token); //always returns user_id if it's valid.
-  opertationToResponse(res, result);
+  operationToResponse(res, result);
 });
 
 //#8- GET user by name:
 routeUser.get("/search/:username", async (req, res) => {
   const result = await getUserByName(req.params.username);
-  opertationToResponse(res, result as object);
+  operationToResponse(res, result as object);
 });
 
 //#9- Change password:
@@ -189,7 +188,7 @@ routeUser.put("/change_pass/:id", async (req, res) => {
   const password = isPasswordValid(user.user_password);
   if (validateOperation(res, password)) return;
 
-  //Attemps to change password.
+  //attempts to change password.
   const result = await changeUserPassword(user, id);
-  opertationToResponse(res, result as object);
+  operationToResponse(res, result as object);
 });

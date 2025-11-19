@@ -18,7 +18,7 @@ WARNING: Will disable the other scripts from working.
 
 # Internal Response Object (IRO).
 
-This project uses internal messages and responses formated as objects that each "operations" return.
+This project uses internal messages and responses formatted as objects that each "operations" return.
 => Helps checking for success and easier response for the API.
 
 Here is the following template:
@@ -31,7 +31,7 @@ detail: string,
 content?: object
 }
 
-(Internal messages where removed to use the api response template for easier retuns).
+(Internal messages where removed to use the api response template for easier returns).
 
 # ROUTES
 
@@ -41,15 +41,17 @@ content?: object
 
 ### ENDPOINTS:
 
-**POST** */user/* REQ: {user_name, user_email, user_password}<br />
-**POST** */user/login* REQ: {user_email, user_password} RES: user_token<br />
-**POST** */user/logout* REQ: {user_token} <br />
+**POST** _/user/_ REQ: {user_name, user_email, user_password}<br />
+**POST** _/user/login_ REQ: {user_email, user_password} RES: user_token<br />
+**POST** _/user/logout_ REQ: {user_token} <br />
+
 <!-- **GET** */user/:id* RES: user_name<br /> -->
-**PUT** */user/:id* REQ: {user_token, ..., !user_id, !user_password, !user_created_at}<br />
-**DELETE** */user/:id* REQ: {user_token} <br />
-**GET** */user/get_id* REQ: {user_token} user_id<br />
-**GET** */user/search/:username* RES: {user_id, user_name}<br />
-**PUT** */user/change_pass/:id* REQ: {user_token, user_password} <br />
+
+**PUT** _/user/:id_ REQ: {user_token, ..., !user_id, !user_password, !user_created_at}<br />
+**DELETE** _/user/:id_ REQ: {user_token} <br />
+**GET** _/user/get_id_ REQ: {user_token} user_id<br />
+**GET** _/user/search/:username_ RES: {user_id, user_name}<br />
+**PUT** _/user/change_pass/:id_ REQ: {user_token, user_password} <br />
 
 # Services :
 
@@ -63,10 +65,10 @@ content?: object
   _async_ **dbRun()**: Returns a Promise, attempts to execute a prepared "run" statement in the db.
 
   Basic CRUD:
-  _async_ **dbSelect()**: Returns a Promise, attemps to retrieve data from the db.
-  _async_ **dbInsert()**: Returns a Promise, attemps to insert data into the db.
-  _async_ **dbUpdate()**: Returns a Promise, attemps to update data from the db.
-  _async_ **dbDelete()**: Returns a Promise, attemps to delete data from the db.
+  _async_ **dbSelect()**: Returns a Promise, attempts to retrieve data from the db.
+  _async_ **dbInsert()**: Returns a Promise, attempts to insert data into the db.
+  _async_ **dbUpdate()**: Returns a Promise, attempts to update data from the db.
+  _async_ **dbDelete()**: Returns a Promise, attempts to delete data from the db.
 
 - _src/services/db/user.service.ts_
   Handles communication with user table implementing the logic needed.
@@ -96,10 +98,10 @@ content?: object
 
 ## Encryption
 
-- _src/services/encrytption/bcrypt.service.ts_
+- _src/services/encryption/bcrypt.service.ts_
   Handles bcrypt operations:
 
-  **encryptPassword()**: Rertunrs a hashed password as a string.
+  **encryptPassword()**: Returns a hashed password as a string.
   **isPasswordCorrect()**: Returns a bool : compares a string to an hashed password.
   _async_ **validateUserPassword()**: Returns an IRO : Attempts to validate a password.
 
@@ -114,7 +116,7 @@ content?: object
 - _src/services/validation/operations.service.ts_
   Easily validate any operation that returns an IRO:
 
-  **opertationToResponse()**: Formats an IRO and sends it throught the API as a response.
+  **operationToResponse()**: Formats an IRO and sends it through the API as a response.
   **validateOperation()**: Does the same but returns true if it fails : so the endpoint can check for a fail easily and return.
 
 - _src/services/validation/params.service.ts_
@@ -130,7 +132,7 @@ content?: object
   Handles token logic:
 
   **createToken()**: Returns a generated token as string.
-  _async_ **isTokenValid()**: Returns an IRO : Checks if the token exists in the db. 
+  _async_ **isTokenValid()**: Returns an IRO : Checks if the token exists in the db.
   **isTokenOfUser()**: Returns an IRO : Tells if the id matches the one of the given token.
 
 # Utils :
@@ -145,4 +147,3 @@ content?: object
   **getProperty()**: Retrieves a defined property.
   **getSuccess()**: Returns bool : Easy check for success.
   **getStatus()**: Returns number : Easy check for status.
-

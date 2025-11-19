@@ -1,6 +1,6 @@
 // ### Handles basic db operations: ###
 
-// NOTE:  Preparing every statements even if seemed unecessary prevents any forms of injection:
+// NOTE:  Preparing every statements even if seemed unnecessary prevents any forms of injection:
 //        any queries to replace "?" will transform to a string,
 //        anything added with a "; query.." dynamically will be ignored.
 
@@ -15,7 +15,7 @@ const rootPath = path.resolve("./");
 const dbPath = rootPath + process.env.DB_PATH;
 const dbPass = process.env.DB_PASS;
 
-//Conncect to db:
+//Connect to db:
 function dbOpen() {
   return new sqlite3.Database(dbPath);
 }
@@ -53,7 +53,7 @@ async function dbRun(
     await dbUnlock(db);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
-    return iro(false, "Couldnt open database.", 500, error.message);
+    return iro(false, "Couldn't open database.", 500, error.message);
   }
 
   return new Promise((resolve, reject) => {
@@ -107,7 +107,7 @@ export async function dbSelect(
     await dbUnlock(db);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
-    return iro(false, "Couldnt open database.", 500, error.message);
+    return iro(false, "Couldn't open database.", 500, error.message);
   }
 
   // Creates a promise thats resolves when data is retrieved from the db.
@@ -153,7 +153,7 @@ export async function dbInsert(table: string, object: object) {
   return await dbRun(
     query,
     object,
-    `Operation successfull: added object to ${table}.`
+    `Operation successful: added object to ${table}.`
   );
 }
 
@@ -179,7 +179,7 @@ export async function dbUpdate(
   return await dbRun(
     query,
     object,
-    `Operation successfull: updated object to ${table}.`
+    `Operation successful: updated object to ${table}.`
   );
 }
 
@@ -189,6 +189,6 @@ export async function dbDelete(table: string, conditions: Array<string>) {
   return await dbRun(
     query,
     undefined,
-    `Operation successfull: deleted object from ${table}.`
+    `Operation successful: deleted object from ${table}.`
   );
 }

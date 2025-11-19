@@ -40,7 +40,5 @@ export async function validateUserPassword(user: object) {
         "Passwords did not match."
       );
     }
-  } else return result; //Already formated
+  } else return result; //Already formatted
 }
-
-//encryption logic for conversations will go here ?

@@ -4,6 +4,7 @@
 import { hashSync } from "bcrypt";
 import { getUser, usersToArray } from "./db/user.service.js";
 import { getProperty, getSuccess, iro } from "../utils/responses.utils.js";
+import { getOwnerId } from "./db/conversation.service.js";
 
 //Creating a token using bcrypt, its good enough:
 export function createToken(email: string) {
@@ -16,7 +17,7 @@ export async function isTokenValid(token: string) {
   const result = await getUser(["user_id"], [`user_token = "${token}"`]);
 
   if (getSuccess(result as object)) {
-    //If succeess returns the id.
+    //If success returns the id.
     const content = usersToArray(result) as Array<object>;
     return iro(
       true,
@@ -48,5 +49,38 @@ export function isTokenOfUser(tokenResult: object, id: number) {
     return iro(true, "Token of user.", 100, "Token matching id.");
   } else {
     return iro(false, "Unauthorized user.", 401, "Token not matching id.");
+  }
+}
+
+//Is owner_id == user_id :Takes in the result of a token validation operation because it returns a user id.
+export async function isTokenOfOwner(
+  tokenResult: object,
+  conversation_id: number
+) {
+  if (!getSuccess(tokenResult)) {
+    return tokenResult;
+  }
+  const id = (await getOwnerId(conversation_id)) as object;
+
+  //Returns an array of object => need to take the fist element of this array.
+  const owner = getProperty("content", id);
+  let owner_obj: object;
+  if (owner) {
+    owner_obj = owner[0];
+  } else {
+    return id;
+  }
+
+  const user = getProperty("content", tokenResult) as unknown as object;
+
+  if (
+    getSuccess(id) &&
+    "owner_id" in owner_obj &&
+    "user_id" in user &&
+    owner_obj.owner_id == user.user_id
+  ) {
+    return iro(true, "Token is of owner.", 100, "Ids are matching.");
+  } else {
+    return iro(false, "Unauthorized user.", 401, "Token not of owner.");
   }
 }

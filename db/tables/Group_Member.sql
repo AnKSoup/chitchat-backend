@@ -1,6 +1,8 @@
 CREATE TABLE IF NOT EXISTS Group_Member (
     user_id INTEGER NOT NULL,
     conversation_id INTEGER NOT NULL,
+    decrypt_key TEXT NOT NULL,
+    decrypt_iv TEXT NOT NULL,
     joined_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     left_at DATETIME,
     FOREIGN KEY (user_id) REFERENCES User (user_id) ON DELETE CASCADE,
