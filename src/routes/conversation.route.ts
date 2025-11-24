@@ -11,6 +11,7 @@ import {
 import {
   createConversation,
   deleteConversation,
+  getAllMembers,
   getConversation,
   updateConversation,
 } from "../services/db/conversation.service.js";
@@ -23,8 +24,9 @@ export const routeConversation = Router();
 // #2- Create conv:   POST    /conversation/      REQ: {conversation_name, owner_id}                                  RES: {key, iv}
 // #3- Update conv:   PUT     /conversation/:id   REQ: {user_token, ...,  !conversation_id, !conversation_created_at} RES: {message}
 // #4- Delete conv:   DELETE  /conversation/:id   REQ: {user_token}                                                   RES: {message}
+// #5- All members:   GET     /conversation/members_of/:conversation_id                                               RES: {user_id}
 
-//#1- Retrieves a conservation by id:
+//#1- Retrieves a conversation by id:
 routeConversation.get("/:id", (req, res) => {
   const id = parseInt(req.params.id);
 
@@ -47,7 +49,7 @@ routeConversation.post("/", async (req, res) => {
   operationToResponse(res, result);
 });
 
-//3- Updates a conservation with id:
+//3- Updates a conversation with id:
 routeConversation.put("/:id", async (req, res) => {
   const conv = req.body;
   const id = parseInt(req.params.id);
@@ -82,7 +84,7 @@ routeConversation.put("/:id", async (req, res) => {
   operationToResponse(res, result);
 });
 
-//4- Deletes a conservation:
+//4- Deletes a conversation:
 routeConversation.delete("/:id", async (req, res) => {
   const conv = req.body;
   const id = parseInt(req.params.id);
@@ -102,5 +104,11 @@ routeConversation.delete("/:id", async (req, res) => {
   operationToResponse(res, result);
 });
 
-//TODO
-//Retrieves all conversations of a group Member
+//Gets all member of a conv
+routeConversation.get("/members_of/:conversation_id", async (req, res) => {
+  const conversation_id = parseInt(req.params.conversation_id);
+
+  //Attempts to retrieve all members.
+  const result = await getAllMembers(conversation_id);
+  operationToResponse(res, result as object);
+});

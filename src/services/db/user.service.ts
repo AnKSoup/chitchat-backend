@@ -17,6 +17,7 @@ import {
 
 // ## CRUD: ##
 // Delete later only there for backward compatibility
+// PLEASE WORK ON THIS BECAUSE THIS IS SO UGLY
 
 // Get User(s).
 export async function getUser(
@@ -182,6 +183,10 @@ export async function logoutUser(tokenResult: object) {
   } else {
     return iro(false, "Invalid id.", 500, "Retrieved id was invalid."); // Shouldn't occur.
   }
+}
+
+export async function getUserById(user_id: number) {
+  return await getItems(["user_name"], "User", [`user_id = ${user_id}`]);
 }
 
 export async function getUserByName(user_name: string) {

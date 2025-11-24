@@ -6,6 +6,7 @@ import { createToken } from "../tokens.service.js";
 import { createItem, deleteItem, getItems, itemsToArray, updateItem, } from "./safe_queries.service.js";
 // ## CRUD: ##
 // Delete later only there for backward compatibility
+// PLEASE WORK ON THIS BECAUSE THIS IS SO UGLY
 // Get User(s).
 export async function getUser(columns, conditions, limit) {
     return await getItems(columns, "User", conditions, limit);
@@ -122,6 +123,9 @@ export async function logoutUser(tokenResult) {
     else {
         return iro(false, "Invalid id.", 500, "Retrieved id was invalid."); // Shouldn't occur.
     }
+}
+export async function getUserById(user_id) {
+    return await getItems(["user_name"], "User", [`user_id = ${user_id}`]);
 }
 export async function getUserByName(user_name) {
     const result = await getUser(["user_id, user_name"], [`user_name LIKE '%${user_name}%'`]);

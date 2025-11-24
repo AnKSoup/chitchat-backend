@@ -42,6 +42,7 @@ export async function isTokenOfOwner(tokenResult, conversation_id) {
     if (!getSuccess(tokenResult)) {
         return tokenResult;
     }
+    //Gets owner of the conversation
     const id = (await getOwnerId(conversation_id));
     //Returns an array of object => need to take the fist element of this array.
     const owner = getProperty("content", id);

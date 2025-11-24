@@ -49,6 +49,7 @@ export declare function logoutUser(tokenResult: object): Promise<{
     detail: string;
     content: object | undefined;
 }>;
+export declare function getUserById(user_id: number): Promise<unknown>;
 export declare function getUserByName(user_name: string): Promise<unknown>;
 export declare function editUser(user: object, id: number): Promise<{
     success: boolean;

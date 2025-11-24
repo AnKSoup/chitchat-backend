@@ -5,6 +5,7 @@ import "dotenv/config";
 //Routers:
 import { routeUser } from "./routes/user.route.js";
 import { routeConversation } from "./routes/conversation.route.js";
+import { routeGroupMember } from "./routes/group_member.route.js";
 // import { response } from "./utils/responses.utils.js";
 // import { operationToResponse } from "./services/validation/operations.service.js";
 
@@ -23,6 +24,7 @@ app.use(urlencoded({ extended: true })); //To get infos from forms.
 //Routers:
 app.use("/user", routeUser);
 app.use("/conversation", routeConversation);
+app.use("/group_member", routeGroupMember);
 
 // //General Error handler: (Prevents any crash.)
 // // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
@@ -39,7 +41,8 @@ console.log(
   1) USER :
     #1- Sign in:    POST    /user/                
     #2- Log in:     POST    /user/login           
-    #3- Log out:    POST    /user/logout          
+    #3- Log out:    POST    /user/logout
+    #4- Get by id:  GET     /user/:id          
     #5- Update:     PUT     /user/:id             
     #6- Delete:     DELETE  /user/:id             
     #7- Get id:     GET     /user/get_id          
@@ -51,5 +54,12 @@ console.log(
     #2- Create conv:   POST    /conversation/    
     #3- Update conv:   PUT     /conversation/:id 
     #4- Delete conv:   DELETE  /conversation/:id 
+    #5- All members:   GET     /conversation/members_of/:conversation_id  
+
+  3) GROUP MEMBERS :
+    #1- Join Chat:   POST  /group_member/                        
+    #2- Rejoin Chat: PUT   /group_member/rejoin/:conversation_id 
+    #3- Leave chat:  PUT   /group_member/leave/:conversation_id  
+    #4- All conv:    GET   /group_member/conversation_of/:user_id" 
   `
 );

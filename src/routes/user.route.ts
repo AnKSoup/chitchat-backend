@@ -17,6 +17,7 @@ import {
 import {
   changeUserPassword,
   editUser,
+  getUserById,
   getUserByName,
   loginUser,
   logoutUser,
@@ -36,6 +37,7 @@ ENDPOINTS :
 #1- Sign in:    POST    /user/                  REQ: {user_name, user_email, user_password}                         RES: {message}
 #2- Log in:     POST    /user/login             REQ: {user_email, user_password}                                    RES: {message|user_token}
 #3- Log out:    POST    /user/logout            REQ: {user_token}                                                   RES: {message}
+#4- Get by id:  GET     /user/:id
 #5- Update:     PUT     /user/:id               REQ: {user_token, ..., !user_id, !user_password, !user_created_at}  RES: {message}
 #6- Delete:     DELETE  /user/:id               REQ: {user_token}                                                   RES: {message}
 #7- Get id:     GET     /user/get_id            REQ: {user_token}                                                   RES: {user_id|message}
@@ -43,7 +45,6 @@ ENDPOINTS :
 #9- Chang pass: PUT     /user/change_pass/:id   REQ: {user_token, user_password}                                    RES: {message}
 
 USELESS FOR NOW : 
-#4- Get by id:  GET     /user/:id                                                                                   RES: {user_name|message}
 */
 
 export const routeUser = Router();
@@ -101,8 +102,13 @@ routeUser.post("/logout", async (req, res) => {
   operationToResponse(res, result);
 });
 
-// //#4- Get by id:
-// routeUser.get('/:id', (req, res) => {});
+//#4- Get by id:
+routeUser.get("/:id", async (req, res) => {
+  const id = parseInt(req.params.id);
+  //Attempts to retrieve user:
+  const result = await getUserById(id);
+  operationToResponse(res, result as object);
+});
 
 //#5- Update user info by id with token verification :
 routeUser.put("/:id", async (req, res) => {

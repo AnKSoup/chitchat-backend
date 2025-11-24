@@ -1,5 +1,5 @@
 // ### TO PREVENT UNWANTED BODY PARAMS ###
-import { iro } from "../../utils/responses.utils.js";
+import { getProperty, iro } from "../../utils/responses.utils.js";
 // //In case no params were sent:
 // export function isParamNull(object: object) {
 //   if (object == null) {
@@ -90,5 +90,15 @@ export function isPresent(object, array) {
         }
     }
     return iro(true, "Params ok.", 100, "Required params ok.");
+}
+export function isNotNull(object, array) {
+    const obj = object;
+    const arr = array;
+    for (let i = 0; i < arr.length; i++) {
+        if (!getProperty(arr[i], obj)) {
+            return iro(false, "Missing parameters.", 400, `Ensure that ${arr[i]} is not null.`);
+        }
+    }
+    return iro(true, "Params ok", 100, "No null params!");
 }
 //# sourceMappingURL=params.service.js.map

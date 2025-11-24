@@ -18,7 +18,7 @@ export function createKeyAndIV() {
     }
 }
 //encrypts a message and retrieve its tag.
-export function encrypt(message, key, iv) {
+export function encryptMessage(message, key, iv) {
     try {
         //Converts base64 strings into buffers
         const keyBuffer = Buffer.from(key, "base64");
@@ -37,7 +37,7 @@ export function encrypt(message, key, iv) {
         return iro(false, "Couldn't encrypt the message.", 500, message);
     }
 }
-export function decrypt(message, key, iv, tag) {
+export function decryptMessage(message, key, iv, tag) {
     try {
         //Converts base64 strings into buffers
         const keyBuffer = Buffer.from(key, "base64");
@@ -55,5 +55,36 @@ export function decrypt(message, key, iv, tag) {
         const message = getProperty("message", error);
         return iro(false, "Couldn't encrypt the message.", 500, message);
     }
+}
+//## ASYMMETRIC LOGIC
+// ### THOSE SHOULD BE EXECUTED CLIENT SIDE
+// Move it later, here for testing purposes.
+//Generate a random pair of keys for a client.
+export function createPair() {
+    const { publicKey, privateKey } = crypto.generateKeyPairSync("rsa", {
+        modulusLength: 2048,
+        publicKeyEncoding: {
+            type: "spki",
+            format: "pem",
+        },
+        privateKeyEncoding: {
+            type: "pkcs8",
+            format: "pem",
+        },
+    });
+    return {
+        publicKey: publicKey,
+        privateKey: privateKey,
+    };
+}
+//Encrypts a symmetric key
+export function encryptKey(publicKey, key) {
+    const encryptedKey = crypto.publicEncrypt(publicKey, Buffer.from(key, "base64"));
+    return encryptedKey.toString("base64");
+}
+//Decrypts a symmetric key
+export function decryptKey(privateKey, encryptedKey) {
+    const decryptedKey = crypto.privateDecrypt(privateKey, Buffer.from(encryptedKey, "base64"));
+    return decryptedKey.toString("base64");
 }
 //# sourceMappingURL=conversation_encryption.service.js.map

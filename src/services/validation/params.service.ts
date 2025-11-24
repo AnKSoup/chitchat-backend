@@ -1,6 +1,6 @@
 // ### TO PREVENT UNWANTED BODY PARAMS ###
 
-import { iro } from "../../utils/responses.utils.js";
+import { getProperty, iro } from "../../utils/responses.utils.js";
 
 // //In case no params were sent:
 // export function isParamNull(object: object) {
@@ -129,4 +129,22 @@ export function isPresent(object: object, array: Array<string>) {
   }
 
   return iro(true, "Params ok.", 100, "Required params ok.");
+}
+
+export function isNotNull(object: object, array: Array<string>) {
+  const obj = object;
+  const arr = array;
+
+  for (let i = 0; i < arr.length; i++) {
+    if (!getProperty(arr[i] as string, obj)) {
+      return iro(
+        false,
+        "Missing parameters.",
+        400,
+        `Ensure that ${arr[i]} is not null.`
+      );
+    }
+  }
+
+  return iro(true, "Params ok", 100, "No null params!");
 }

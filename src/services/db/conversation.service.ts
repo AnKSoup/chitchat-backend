@@ -3,6 +3,7 @@
 
 import { getProperty, getSuccess, iro } from "../../utils/responses.utils.js";
 import { createKeyAndIV } from "../encryption/conversation_encryption.service.js";
+import { doesItemExist } from "../validation/items.service.js";
 import {
   createItem,
   deleteItem,
@@ -42,17 +43,15 @@ export async function updateConversation(
   conv: object,
   conversation_id: number
 ) {
-  const result = await updateItem("Conversation", conv, [
+  return await updateItem("Conversation", conv, [
     `conversation_id = ${conversation_id}`,
   ]);
-  return result;
 }
 
 export async function deleteConversation(conversation_id: number) {
-  const result = await deleteItem("Conversation", [
+  return await deleteItem("Conversation", [
     `conversation_id = ${conversation_id}`,
   ]);
-  return result;
 }
 
 //Get owner id
@@ -64,6 +63,19 @@ export async function getOwnerId(conversation_id: number) {
 
 export async function getConversation(conversation_id: number) {
   return await getItems(["*"], "Conversation", [
+    `conversation_id = ${conversation_id}`,
+  ]);
+}
+
+export async function doesConvExist(conversation_id: number) {
+  return await doesItemExist(["conversation_name"], "Conversation", [
+    `conversation_id = ${conversation_id}`,
+  ]);
+}
+
+export async function getAllMembers(conversation_id: number) {
+  //Get members where conv id = conv id
+  return await getItems(["user_id"], "Group_Member", [
     `conversation_id = ${conversation_id}`,
   ]);
 }
