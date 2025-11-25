@@ -8,6 +8,7 @@ import {
   createItem,
   deleteItem,
   getItems,
+  getItemsJoin,
   updateItem,
 } from "./safe_queries.service.js";
 
@@ -73,9 +74,21 @@ export async function doesConvExist(conversation_id: number) {
   ]);
 }
 
+// export async function getAllMembers(conversation_id: number) {
+//   //Get members where conv id = conv id
+//   return await getItems(["user_id"], "Group_Member", [
+//     `conversation_id = ${conversation_id}`,
+//   ]);
+// }
 export async function getAllMembers(conversation_id: number) {
   //Get members where conv id = conv id
-  return await getItems(["user_id"], "Group_Member", [
-    `conversation_id = ${conversation_id}`,
-  ]);
+  return await await getItemsJoin(
+    ["user_id"],
+    "Group_Member",
+    ["user_name"],
+    "User",
+    "user_id",
+    "user_id",
+    [`Group_Member.conversation_id = ${conversation_id}`]
+  );
 }

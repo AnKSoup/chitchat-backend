@@ -70,17 +70,8 @@ async function dbRun(query, object, message_success) {
         });
     });
 }
-//SELECT: await dbSelect()
 //Looks similar to dbRun() but executes all() instead of run().
-export async function dbSelect(columns, table, conditions, limit) {
-    // Formats the query as SELECT (...) FROM ... WHERE ... AND ... LIMIT ...;
-    let query = `SELECT ${columns.join(", ")} FROM ${table}`;
-    if (conditions) {
-        query += ` WHERE ${conditions.join(" AND ")}`;
-    }
-    if (limit) {
-        query += ` LIMIT ${limit};`;
-    }
+async function dbAll(query) {
     //Connect to db:
     const db = dbOpen();
     try {
@@ -117,6 +108,34 @@ export async function dbSelect(columns, table, conditions, limit) {
             db.close();
         });
     });
+}
+//SELECT: await dbSelect()
+export async function dbSelect(columns, table, conditions, limit) {
+    // Formats the query as SELECT (...) FROM ... WHERE ... AND ... LIMIT ...;
+    let query = `SELECT ${columns.join(", ")} FROM ${table}`;
+    if (conditions) {
+        query += ` WHERE ${conditions.join(" AND ")}`;
+    }
+    if (limit) {
+        query += ` LIMIT ${limit};`;
+    }
+    return await dbAll(query);
+}
+//SELECT WITH JOIN: await dbSelectJoin()
+export async function dbSelectJoin(columns1, table1, columns2, table2, join1, join2, conditions, limit) {
+    // Formats the query as SELECT (table.column ...) FROM ... JOIN ... ON ...=... WHERE ... AND ... LIMIT ...;
+    let query = `SELECT ${columns1
+        .map((item) => `${table1}.${item}`)
+        .join(", ")}, ${columns2
+        .map((item) => `${table2}.${item}`)
+        .join(", ")} FROM ${table1} JOIN ${table2} ON ${table1}.${join1} = ${table2}.${join2}`;
+    if (conditions) {
+        query += ` WHERE ${conditions.join(" AND ")}`;
+    }
+    if (limit) {
+        query += ` LIMIT ${limit};`;
+    }
+    return await dbAll(query);
 }
 //INSERT: await dbInsert()
 export async function dbInsert(table, object) {

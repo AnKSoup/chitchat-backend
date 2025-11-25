@@ -33,6 +33,19 @@ app.use("/group_member", routeGroupMember);
 //   operationToResponse(res, result);
 // });
 
+//TEST
+// app.get("/", async (req, res) => {
+//   const result = await getItemsJoin(
+//     ["conversation_id", "joined_at"],
+//     "Group_Member",
+//     ["user_name", "user_email"],
+//     "User",
+//     "user_id",
+//     "user_id"
+//   );
+//   res.send(result);
+// });
+
 // #ENDPOINTS (delete later, is for easier testing)
 console.log(
   `

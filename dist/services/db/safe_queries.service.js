@@ -1,6 +1,6 @@
 // Try catches queries and return iros for easier implementation:
 import { getProperty, iro } from "../../utils/responses.utils.js";
-import { dbDelete, dbInsert, dbSelect, dbUpdate } from "./queries.service.js";
+import { dbDelete, dbInsert, dbSelect, dbSelectJoin, dbUpdate, } from "./queries.service.js";
 // Get Item(s).
 export async function getItems(columns, table, conditions, limit) {
     try {
@@ -9,6 +9,15 @@ export async function getItems(columns, table, conditions, limit) {
     }
     catch (error) {
         return iro(false, `No ${table}(s) found.`, 400, `No ${table}(s) corresponding to query.`);
+    }
+}
+export async function getItemsJoin(columns1, table1, columns2, table2, join1, join2, conditions, limit) {
+    try {
+        return await dbSelectJoin(columns1, table1, columns2, table2, join1, join2, conditions, limit);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    }
+    catch (error) {
+        return iro(false, `No ${table1}(s) or ${table2}(s) found.`, 400, `No ${table1}(s) or ${table2}(s) corresponding to query.`);
     }
 }
 // Creates an item with a JSON.

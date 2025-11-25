@@ -3,7 +3,11 @@
 import { getProperty, getSuccess, iro } from "../../utils/responses.utils.js";
 import { doesItemExist } from "../validation/items.service.js";
 import { isNotNull } from "../validation/params.service.js";
-import { createItem, getItems, updateItem } from "./safe_queries.service.js";
+import {
+  createItem,
+  getItemsJoin,
+  updateItem,
+} from "./safe_queries.service.js";
 
 //Attempts to join chat
 export async function joinChat(object: object) {
@@ -96,9 +100,22 @@ export async function rejoinChat(object: object, conversation_id: number) {
   return result;
 }
 
+// export async function getAllConvsOfUser(user_id: number) {
+//   //Get conv id where user = user_ids
+//   return await getItems(["conversation_id"], "Group_Member", [
+//     `user_id = ${user_id}`,
+//   ]);
+// }
+
 export async function getAllConvsOfUser(user_id: number) {
   //Get conv id where user = user_ids
-  return await getItems(["conversation_id"], "Group_Member", [
-    `user_id = ${user_id}`,
-  ]);
+  return await await getItemsJoin(
+    ["conversation_id"],
+    "Group_Member",
+    ["conversation_name"],
+    "Conversation",
+    "conversation_id",
+    "conversation_id",
+    [`Group_Member.user_id = ${user_id}`]
+  );
 }

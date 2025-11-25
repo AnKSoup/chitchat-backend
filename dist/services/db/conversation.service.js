@@ -3,7 +3,7 @@
 import { getProperty, getSuccess, iro } from "../../utils/responses.utils.js";
 import { createKeyAndIV } from "../encryption/conversation_encryption.service.js";
 import { doesItemExist } from "../validation/items.service.js";
-import { createItem, deleteItem, getItems, updateItem, } from "./safe_queries.service.js";
+import { createItem, deleteItem, getItems, getItemsJoin, updateItem, } from "./safe_queries.service.js";
 export async function createConversation(conv) {
     //Insert it into the database
     const result = await createItem("Conversation", conv);
@@ -48,10 +48,14 @@ export async function doesConvExist(conversation_id) {
         `conversation_id = ${conversation_id}`,
     ]);
 }
+// export async function getAllMembers(conversation_id: number) {
+//   //Get members where conv id = conv id
+//   return await getItems(["user_id"], "Group_Member", [
+//     `conversation_id = ${conversation_id}`,
+//   ]);
+// }
 export async function getAllMembers(conversation_id) {
     //Get members where conv id = conv id
-    return await getItems(["user_id"], "Group_Member", [
-        `conversation_id = ${conversation_id}`,
-    ]);
+    return await await getItemsJoin(["user_id"], "Group_Member", ["user_name"], "User", "user_id", "user_id", [`Group_Member.conversation_id = ${conversation_id}`]);
 }
 //# sourceMappingURL=conversation.service.js.map
