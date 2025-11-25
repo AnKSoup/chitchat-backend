@@ -1,5 +1,5 @@
-export declare function getItems(columns: Array<string>, table: string, conditions?: Array<string>, limit?: number): Promise<unknown>;
-export declare function getItemsJoin(columns1: Array<string>, table1: string, columns2: Array<string>, table2: string, join1: string, join2: string, conditions?: Array<string>, limit?: number): Promise<unknown>;
+export declare function getItems(columns: Array<string>, table: string, conditions?: Array<string>, invert?: string, limit?: number, offset?: number): Promise<unknown>;
+export declare function getItemsJoin(columns1: Array<string>, table1: string, columns2: Array<string>, table2: string, join1: string, join2: string, conditions?: Array<string>, invert?: string, limit?: number, offset?: number): Promise<unknown>;
 export declare function createItem(table: string, item: object): Promise<{
     success: boolean;
     title: string;

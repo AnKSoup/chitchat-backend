@@ -5,6 +5,7 @@ import { doesItemExist } from "../validation/items.service.js";
 import { isNotNull } from "../validation/params.service.js";
 import {
   createItem,
+  getItems,
   getItemsJoin,
   updateItem,
 } from "./safe_queries.service.js";
@@ -71,6 +72,38 @@ export async function isSafeToCreate(object: object) {
     );
   } else {
     return iro(true, "Member doesn't exist.", 100, "Member is safe to create.");
+  }
+}
+
+export async function isMemberInConv(user_id: number, conversation_id: number) {
+  //gets the conv and checks if user didn't leave with id
+  const result = await getItems(["joined_at"], "Group_Member", [
+    `user_id = ${user_id}`,
+    `conversation_id = ${conversation_id}`,
+  ]);
+  if (getSuccess(result as object)) {
+    const content = getProperty(
+      "content",
+      result as object
+    ) as unknown as Array<object>;
+    const object = content[0];
+    if (object && "joined_at" in object && object.joined_at) {
+      return iro(
+        true,
+        "Member in conv.",
+        100,
+        "Member is present in conversation."
+      );
+    } else {
+      return iro(
+        false,
+        "Member left.",
+        400,
+        "Member not in conversation anymore."
+      );
+    }
+  } else {
+    return result;
   }
 }
 

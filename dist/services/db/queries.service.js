@@ -110,19 +110,26 @@ async function dbAll(query) {
     });
 }
 //SELECT: await dbSelect()
-export async function dbSelect(columns, table, conditions, limit) {
+export async function dbSelect(columns, table, conditions, invert, limit, offset) {
     // Formats the query as SELECT (...) FROM ... WHERE ... AND ... LIMIT ...;
     let query = `SELECT ${columns.join(", ")} FROM ${table}`;
     if (conditions) {
         query += ` WHERE ${conditions.join(" AND ")}`;
     }
-    if (limit) {
-        query += ` LIMIT ${limit};`;
+    if (invert) {
+        query += ` ORDER BY ${invert} DESC`;
     }
+    if (limit) {
+        query += ` LIMIT ${limit}`;
+    }
+    if (offset) {
+        query += ` OFFSET ${offset}`;
+    }
+    query += ";";
     return await dbAll(query);
 }
 //SELECT WITH JOIN: await dbSelectJoin()
-export async function dbSelectJoin(columns1, table1, columns2, table2, join1, join2, conditions, limit) {
+export async function dbSelectJoin(columns1, table1, columns2, table2, join1, join2, conditions, invert, limit, offset) {
     // Formats the query as SELECT (table.column ...) FROM ... JOIN ... ON ...=... WHERE ... AND ... LIMIT ...;
     let query = `SELECT ${columns1
         .map((item) => `${table1}.${item}`)
@@ -132,9 +139,16 @@ export async function dbSelectJoin(columns1, table1, columns2, table2, join1, jo
     if (conditions) {
         query += ` WHERE ${conditions.join(" AND ")}`;
     }
-    if (limit) {
-        query += ` LIMIT ${limit};`;
+    if (invert) {
+        query += ` ORDER BY ${invert} DESC`;
     }
+    if (limit) {
+        query += ` LIMIT ${limit}`;
+    }
+    if (offset) {
+        query += ` OFFSET ${offset}`;
+    }
+    query += ";";
     return await dbAll(query);
 }
 //INSERT: await dbInsert()

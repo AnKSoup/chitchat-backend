@@ -14,10 +14,12 @@ export async function getItems(
   columns: Array<string>,
   table: string,
   conditions?: Array<string>,
-  limit?: number
+  invert?: string,
+  limit?: number,
+  offset?: number
 ) {
   try {
-    return await dbSelect(columns, table, conditions, limit);
+    return await dbSelect(columns, table, conditions, invert, limit, offset);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
     return iro(
@@ -37,7 +39,9 @@ export async function getItemsJoin(
   join1: string,
   join2: string,
   conditions?: Array<string>,
-  limit?: number
+  invert?: string,
+  limit?: number,
+  offset?: number
 ) {
   try {
     return await dbSelectJoin(
@@ -48,7 +52,9 @@ export async function getItemsJoin(
       join1,
       join2,
       conditions,
-      limit
+      invert,
+      limit,
+      offset
     );
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
@@ -101,7 +107,12 @@ export async function updateItem(
 export async function deleteItem(table: string, conditions: Array<string>) {
   try {
     await dbDelete(table, conditions);
-    return iro(true, `${table} delete.`, 201, `${table} successfully delete.`);
+    return iro(
+      true,
+      `${table} deleted.`,
+      201,
+      `${table} successfully deleted.`
+    );
   } catch (error) {
     const detail = getProperty("detail", error as object) as unknown as string; //Dont worry typescript it's not null..
     return iro(false, `Couldn't delete ${table}.`, 500, detail);

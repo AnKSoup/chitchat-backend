@@ -6,6 +6,7 @@ import "dotenv/config";
 import { routeUser } from "./routes/user.route.js";
 import { routeConversation } from "./routes/conversation.route.js";
 import { routeGroupMember } from "./routes/group_member.route.js";
+import { routeMessage } from "./routes/message.route.js";
 // import { response } from "./utils/responses.utils.js";
 // import { operationToResponse } from "./services/validation/operations.service.js";
 
@@ -25,25 +26,13 @@ app.use(urlencoded({ extended: true })); //To get infos from forms.
 app.use("/user", routeUser);
 app.use("/conversation", routeConversation);
 app.use("/group_member", routeGroupMember);
+app.use("/message", routeMessage);
 
 // //General Error handler: (Prevents any crash.)
 // // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
 // app.use((err: any, req: any, res: any, next: any) => {
 //   const result = iro(false, "Error occurred.", 500, err.message);
 //   operationToResponse(res, result);
-// });
-
-//TEST
-// app.get("/", async (req, res) => {
-//   const result = await getItemsJoin(
-//     ["conversation_id", "joined_at"],
-//     "Group_Member",
-//     ["user_name", "user_email"],
-//     "User",
-//     "user_id",
-//     "user_id"
-//   );
-//   res.send(result);
 // });
 
 // #ENDPOINTS (delete later, is for easier testing)
@@ -74,5 +63,11 @@ console.log(
     #2- Rejoin Chat: PUT   /group_member/rejoin/:conversation_id 
     #3- Leave chat:  PUT   /group_member/leave/:conversation_id  
     #4- All conv:    GET   /group_member/conversation_of/:user_id" 
+
+  4) MESSAGES :
+    // #1- Get all messages:  GET     /message/:conversation_id 
+    // #2- Write message:     POST    /message/:conversation_id 
+    // #3- Edit message:      PUT     /message/:conversation_id 
+    // #4- Delete message:    DELETE  /message/:conversation_id 
   `
 );

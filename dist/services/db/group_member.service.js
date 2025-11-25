@@ -2,7 +2,7 @@
 import { getProperty, getSuccess, iro } from "../../utils/responses.utils.js";
 import { doesItemExist } from "../validation/items.service.js";
 import { isNotNull } from "../validation/params.service.js";
-import { createItem, getItemsJoin, updateItem, } from "./safe_queries.service.js";
+import { createItem, getItems, getItemsJoin, updateItem, } from "./safe_queries.service.js";
 //Attempts to join chat
 export async function joinChat(object) {
     const check = isNotNull(object, [
@@ -51,6 +51,26 @@ export async function isSafeToCreate(object) {
     }
     else {
         return iro(true, "Member doesn't exist.", 100, "Member is safe to create.");
+    }
+}
+export async function isMemberInConv(user_id, conversation_id) {
+    //gets the conv and checks if user didn't leave with id
+    const result = await getItems(["joined_at"], "Group_Member", [
+        `user_id = ${user_id}`,
+        `conversation_id = ${conversation_id}`,
+    ]);
+    if (getSuccess(result)) {
+        const content = getProperty("content", result);
+        const object = content[0];
+        if (object && "joined_at" in object && object.joined_at) {
+            return iro(true, "Member in conv.", 100, "Member is present in conversation.");
+        }
+        else {
+            return iro(false, "Member left.", 400, "Member not in conversation anymore.");
+        }
+    }
+    else {
+        return result;
     }
 }
 //then rejoin chat if member left and you want them back in

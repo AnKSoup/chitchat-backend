@@ -1,18 +1,5 @@
 // ### TO PREVENT UNWANTED BODY PARAMS ###
 import { getProperty, iro } from "../../utils/responses.utils.js";
-// //In case no params were sent:
-// export function isParamNull(object: object) {
-//   if (object == null) {
-//     return iro(
-//       false,
-//       "No Parameters.",
-//       400,
-//       "No parameters were provided."
-//     );
-//   } else {
-//     return message(true, "Params ok.");
-//   }
-// }
 export function allowOnly(object, array) {
     //Will throw error if null object is null, additionally check for empty
     // Why? : Express will treat empty parameters differently based on the type of https requests.

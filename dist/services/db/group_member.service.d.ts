@@ -19,6 +19,7 @@ export declare function isSafeToCreate(object: object): Promise<{
     detail: string;
     content: object | undefined;
 }>;
+export declare function isMemberInConv(user_id: number, conversation_id: number): Promise<unknown>;
 export declare function rejoinChat(object: object, conversation_id: number): Promise<{
     success: boolean;
     title: string;

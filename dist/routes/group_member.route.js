@@ -33,7 +33,6 @@ routeGroupMember.post("/", async (req, res) => {
     const owner = await isTokenOfOwner(token, member.conversation_id);
     if (validateOperation(res, owner))
         return;
-    console.log("hel");
     const user = await doesUserExist(member.user_id);
     if (validateOperation(res, user))
         return;

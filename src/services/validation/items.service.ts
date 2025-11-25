@@ -15,7 +15,7 @@ export async function doesItemExist(
   } else {
     return iro(
       false,
-      `${table} doesn't exists.`,
+      `${table} doesn't exist.`,
       400,
       `Please provide an existing ${table}.`
     );

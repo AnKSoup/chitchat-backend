@@ -7,7 +7,7 @@ export async function doesItemExist(columns, table, conditions) {
         return iro(true, "Item exist.", 200, `Item exists in ${table}.`);
     }
     else {
-        return iro(false, `${table} doesn't exists.`, 400, `Please provide an existing ${table}.`);
+        return iro(false, `${table} doesn't exist.`, 400, `Please provide an existing ${table}.`);
     }
 }
 export async function doesUserExist(id) {

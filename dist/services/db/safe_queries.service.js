@@ -2,18 +2,18 @@
 import { getProperty, iro } from "../../utils/responses.utils.js";
 import { dbDelete, dbInsert, dbSelect, dbSelectJoin, dbUpdate, } from "./queries.service.js";
 // Get Item(s).
-export async function getItems(columns, table, conditions, limit) {
+export async function getItems(columns, table, conditions, invert, limit, offset) {
     try {
-        return await dbSelect(columns, table, conditions, limit);
+        return await dbSelect(columns, table, conditions, invert, limit, offset);
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
     }
     catch (error) {
         return iro(false, `No ${table}(s) found.`, 400, `No ${table}(s) corresponding to query.`);
     }
 }
-export async function getItemsJoin(columns1, table1, columns2, table2, join1, join2, conditions, limit) {
+export async function getItemsJoin(columns1, table1, columns2, table2, join1, join2, conditions, invert, limit, offset) {
     try {
-        return await dbSelectJoin(columns1, table1, columns2, table2, join1, join2, conditions, limit);
+        return await dbSelectJoin(columns1, table1, columns2, table2, join1, join2, conditions, invert, limit, offset);
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
     }
     catch (error) {
@@ -46,7 +46,7 @@ export async function updateItem(table, item, conditions) {
 export async function deleteItem(table, conditions) {
     try {
         await dbDelete(table, conditions);
-        return iro(true, `${table} delete.`, 201, `${table} successfully delete.`);
+        return iro(true, `${table} deleted.`, 201, `${table} successfully deleted.`);
     }
     catch (error) {
         const detail = getProperty("detail", error); //Dont worry typescript it's not null..
