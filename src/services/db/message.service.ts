@@ -19,6 +19,7 @@ export async function getMessagesFromConv(
     [
       "message_id",
       "message_content",
+      "message_tag",
       "message_sent_at",
       "message_modified_at",
       "in_response_to",
@@ -39,6 +40,7 @@ export async function getMessagesFromConv(
 export async function createMessage(message: object, conversation_id: number) {
   //Content encrypted by client
   const message_content = getProperty("message_content", message);
+  const message_tag = getProperty("message_tag", message);
   const user_id = getProperty("user_id", message);
   //In response to ? => if "0" insert null
   let in_response_to = getProperty("in_response_to", message) as unknown;
@@ -58,6 +60,7 @@ export async function createMessage(message: object, conversation_id: number) {
 
   return await createItem("Message", {
     message_content: message_content,
+    message_tag: message_tag,
     conversation_id: conversation_id,
     user_id: user_id,
     in_response_to: in_response_to,
@@ -65,12 +68,13 @@ export async function createMessage(message: object, conversation_id: number) {
 }
 
 // Attempts to edit a message.
-export async function editMessage(message_id: number, message_content: string) {
+export async function editMessage(message_id: number, message_content: string, message_tag: string) {
   const date = new Date();
   return await updateItem(
     "Message",
     {
       message_content: message_content,
+      message_tag: message_tag,
       message_modified_at: date.toISOString(),
     },
     [`message_id = ${message_id}`]
@@ -90,7 +94,7 @@ export async function isMessageOfId(message_id: number, user_id: number) {
   ]);
 }
 
-// If message not exist in conv then impossible to create
+// If message not exist in conv then impossible to operate on
 export async function isMessageInConv(
   message_id: number,
   conversation_id: number

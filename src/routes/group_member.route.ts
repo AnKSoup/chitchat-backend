@@ -11,8 +11,8 @@ import {
   operationToResponse,
   validateOperation,
 } from "../services/validation/operations.service.js";
-import { doesUserExist } from "../services/validation/items.service.js";
-import { doesConvExist } from "../services/db/conversation.service.js";
+import { doesConvExist, doesUserExist } from "../services/validation/items.service.js";
+
 import {
   isTokenOfOwner,
   isTokenOfUser,

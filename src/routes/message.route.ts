@@ -9,8 +9,7 @@ import {
   isTokenOfUser,
   isTokenValid,
 } from "../services/tokens.service.js";
-import { doesUserExist } from "../services/validation/items.service.js";
-import { doesConvExist } from "../services/db/conversation.service.js";
+import { doesConvExist, doesUserExist } from "../services/validation/items.service.js";
 import { isMemberInConv } from "../services/db/group_member.service.js";
 import {
   createMessage,
@@ -22,10 +21,10 @@ import {
 } from "../services/db/message.service.js";
 
 // ENDPOINTS :
-// #1- Get all messages:  GET     /message/:conversation_id REQ: {} RES: {}
-// #2- Write message:     POST    /message/:conversation_id REQ: {} RES: {}
-// #3- Edit message:      PUT     /message/:conversation_id REQ: {} RES: {}
-// #4- Delete message:    DELETE  /message/:conversation_id REQ: {} RES: {}
+// #1- Get all messages:  GET     /message/:conversation_id REQ: {user_token, user_id, message_count, message_offset}   RES: {messages}
+// #2- Write message:     POST    /message/:conversation_id REQ: {user_token, user_id, message_content, in_response_to}
+// #3- Edit message:      PUT     /message/:conversation_id REQ: {user_token, user_id, message_id, message_content}
+// #4- Delete message:    DELETE  /message/:conversation_id REQ: {user_token, user_id, message_id}
 
 export const routeMessage = Router();
 
@@ -74,6 +73,7 @@ routeMessage.post("/:conversation_id", async (req, res) => {
     "user_token",
     "user_id",
     "message_content",
+    "message_tag",
     "in_response_to",
   ]);
   if (validateOperation(res, params)) return;
@@ -108,6 +108,7 @@ routeMessage.put("/:conversation_id", async (req, res) => {
     "user_id",
     "message_id",
     "message_content",
+    "message_tag",
   ]);
   if (validateOperation(res, params)) return;
 
@@ -124,7 +125,7 @@ routeMessage.put("/:conversation_id", async (req, res) => {
   const user = isTokenOfUser(token, message.user_id);
   if (validateOperation(res, user)) return;
 
-  const result = await editMessage(message.message_id, message.message_content);
+  const result = await editMessage(message.message_id, message.message_content, message.message_tag);
   operationToResponse(res, result);
 });
 

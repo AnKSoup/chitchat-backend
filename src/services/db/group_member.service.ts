@@ -36,6 +36,32 @@ export async function joinChat(object: object) {
   return result;
 }
 
+//then rejoin chat if member left and you want them back in
+export async function rejoinChat(object: object, conversation_id: number) {
+  const check = isNotNull(object, ["user_id", "decrypt_key", "decrypt_iv"]);
+  if (!getSuccess(check)) {
+    return check;
+  }
+
+  const date = new Date();
+
+  const user_id = getProperty("user_id", object);
+  const decrypt_key = getProperty("decrypt_key", object);
+  const decrypt_iv = getProperty("decrypt_iv", object);
+
+  const result = await updateItem(
+    "Group_Member",
+    {
+      decrypt_key: decrypt_key,
+      decrypt_iv: decrypt_iv,
+      left_at: null,
+      joined_at: date.toISOString(),
+    },
+    [`user_id = ${user_id}`, `conversation_id = ${conversation_id}`]
+  );
+  return result;
+}
+
 //Attempts to leave chat
 export async function leaveChat(object: object, conversation_id: number) {
   const date = new Date();
@@ -106,39 +132,6 @@ export async function isMemberInConv(user_id: number, conversation_id: number) {
     return result;
   }
 }
-
-//then rejoin chat if member left and you want them back in
-export async function rejoinChat(object: object, conversation_id: number) {
-  const check = isNotNull(object, ["user_id", "decrypt_key", "decrypt_iv"]);
-  if (!getSuccess(check)) {
-    return check;
-  }
-
-  const date = new Date();
-
-  const user_id = getProperty("user_id", object);
-  const decrypt_key = getProperty("decrypt_key", object);
-  const decrypt_iv = getProperty("decrypt_iv", object);
-
-  const result = await updateItem(
-    "Group_Member",
-    {
-      decrypt_key: decrypt_key,
-      decrypt_iv: decrypt_iv,
-      left_at: null,
-      joined_at: date.toISOString(),
-    },
-    [`user_id = ${user_id}`, `conversation_id = ${conversation_id}`]
-  );
-  return result;
-}
-
-// export async function getAllConvsOfUser(user_id: number) {
-//   //Get conv id where user = user_ids
-//   return await getItems(["conversation_id"], "Group_Member", [
-//     `user_id = ${user_id}`,
-//   ]);
-// }
 
 export async function getAllConvsOfUser(user_id: number) {
   //Get conv id where user = user_ids

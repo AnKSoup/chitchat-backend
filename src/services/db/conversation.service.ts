@@ -3,7 +3,6 @@
 
 import { getProperty, getSuccess, iro } from "../../utils/responses.utils.js";
 import { createKeyAndIV } from "../encryption/conversation_encryption.service.js";
-import { doesItemExist } from "../validation/items.service.js";
 import {
   createItem,
   deleteItem,
@@ -11,6 +10,13 @@ import {
   getItemsJoin,
   updateItem,
 } from "./safe_queries.service.js";
+
+// #CRUD
+export async function getConversation(conversation_id: number) {
+  return await getItems(["*"], "Conversation", [
+    `conversation_id = ${conversation_id}`,
+  ]);
+}
 
 export async function createConversation(conv: object) {
   //Insert it into the database
@@ -55,6 +61,7 @@ export async function deleteConversation(conversation_id: number) {
   ]);
 }
 
+// #LOGIC
 //Get owner id
 export async function getOwnerId(conversation_id: number) {
   return await getItems(["owner_id"], "Conversation", [
@@ -62,24 +69,6 @@ export async function getOwnerId(conversation_id: number) {
   ]);
 }
 
-export async function getConversation(conversation_id: number) {
-  return await getItems(["*"], "Conversation", [
-    `conversation_id = ${conversation_id}`,
-  ]);
-}
-
-export async function doesConvExist(conversation_id: number) {
-  return await doesItemExist(["conversation_name"], "Conversation", [
-    `conversation_id = ${conversation_id}`,
-  ]);
-}
-
-// export async function getAllMembers(conversation_id: number) {
-//   //Get members where conv id = conv id
-//   return await getItems(["user_id"], "Group_Member", [
-//     `conversation_id = ${conversation_id}`,
-//   ]);
-// }
 export async function getAllMembers(conversation_id: number) {
   //Get members where conv id = conv id
   return await await getItemsJoin(

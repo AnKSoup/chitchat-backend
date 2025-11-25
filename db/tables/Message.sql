@@ -2,6 +2,7 @@ CREATE TABLE
     IF NOT EXISTS Message (
         message_id INTEGER PRIMARY KEY,
         message_content TEXT NOT NULL,
+        message_tag TEXT NOT NULL,
         message_sent_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         message_modified_at DATETIME,
         in_response_to INTEGER,
