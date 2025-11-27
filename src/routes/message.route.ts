@@ -24,7 +24,7 @@ import {
 } from "../services/db/message.service.js";
 
 // ENDPOINTS :
-// #1- Get all messages:  POST    /message/:conversation_id REQ: {user_token, user_id, message_count, message_offset}   RES: {messages}
+// #1- Get all messages:  POST    /message/get:conversation_id REQ: {user_token, user_id, message_count, message_offset}   RES: {messages}
 // #2- Write message:     POST    /message/:conversation_id REQ: {user_token, user_id, message_content, in_response_to}
 // #3- Edit message:      PUT     /message/:conversation_id REQ: {user_token, user_id, message_id, message_content}
 // #4- Delete message:    DELETE  /message/:conversation_id REQ: {user_token, user_id, message_id}

@@ -27,11 +27,11 @@ export const routeConversation = Router();
 // #5- All members:   GET     /conversation/members_of/:conversation_id                                               RES: {user_id}
 
 //#1- Retrieves a conversation by id:
-routeConversation.get("/:id", (req, res) => {
+routeConversation.get("/:id", async (req, res) => {
   const id = parseInt(req.params.id);
 
-  const result = getConversation(id);
-  operationToResponse(res, result);
+  const result = await getConversation(id);
+  operationToResponse(res, result as object);
 });
 
 //2- Creates a new conversation:

@@ -135,7 +135,7 @@ export async function isMemberInConv(user_id: number, conversation_id: number) {
 
 export async function getAllConvsOfUser(user_id: number) {
   //Get conv id where user = user_ids
-  return await await getItemsJoin(
+  return await getItemsJoin(
     ["conversation_id"],
     "Group_Member",
     ["conversation_name"],

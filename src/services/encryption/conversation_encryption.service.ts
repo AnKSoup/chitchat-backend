@@ -107,37 +107,67 @@ export function decryptMessage(
 
 //Generate a random pair of keys for a client.
 export function createPair() {
-  const { publicKey, privateKey } = crypto.generateKeyPairSync("rsa", {
-    modulusLength: 2048,
-    publicKeyEncoding: {
-      type: "spki",
-      format: "pem",
-    },
-    privateKeyEncoding: {
-      type: "pkcs8",
-      format: "pem",
-    },
-  });
-  return {
-    publicKey: publicKey,
-    privateKey: privateKey,
-  };
+  try {
+    const { publicKey, privateKey } = crypto.generateKeyPairSync("rsa", {
+      modulusLength: 2048,
+      publicKeyEncoding: {
+        type: "spki",
+        format: "pem",
+      },
+      privateKeyEncoding: {
+        type: "pkcs8",
+        format: "pem",
+      },
+    });
+    return iro(true, "Keys successfully generated.", 200, "Keys in content.", {
+      publicKey: publicKey,
+      privateKey: privateKey,
+    });
+  } catch (error) {
+    return iro(false, "Couldn't generate keys.", 500, "Something went wrong.", {
+      error: error,
+    });
+  }
 }
 
 //Encrypts a symmetric key
 export function encryptKey(publicKey: string, key: string) {
-  const encryptedKey = crypto.publicEncrypt(
-    publicKey,
-    Buffer.from(key, "base64")
-  );
-  return encryptedKey.toString("base64");
+  try {
+    const encryptedKey = crypto.publicEncrypt(
+      publicKey,
+      Buffer.from(key, "base64")
+    );
+    return iro(
+      true,
+      "Successfully encrypted the key.",
+      200,
+      "Key in content.",
+      { key: encryptedKey.toString("base64") }
+    );
+  } catch (error) {
+    return iro(false, "Couldn't encrypt key.", 500, "Something went wrong.", {
+      error: error,
+    });
+  }
 }
 
 //Decrypts a symmetric key
 export function decryptKey(privateKey: string, encryptedKey: string) {
-  const decryptedKey = crypto.privateDecrypt(
-    privateKey,
-    Buffer.from(encryptedKey, "base64")
-  );
-  return decryptedKey.toString("base64");
+  try {
+    const decryptedKey = crypto.privateDecrypt(
+      privateKey,
+      Buffer.from(encryptedKey, "base64")
+    );
+    return iro(
+      true,
+      "Successfully decrypted the key.",
+      200,
+      "Key in content.",
+      { key: decryptedKey.toString("base64") }
+    );
+  } catch (error) {
+    return iro(false, "Couldn't decrypt key.", 500, "Something went wrong.", {
+      error: error,
+    });
+  }
 }

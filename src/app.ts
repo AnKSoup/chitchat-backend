@@ -7,6 +7,7 @@ import { routeUser } from "./routes/user.route.js";
 import { routeConversation } from "./routes/conversation.route.js";
 import { routeGroupMember } from "./routes/group_member.route.js";
 import { routeMessage } from "./routes/message.route.js";
+import { routeEncryption } from "./routes/encryption.route.js";
 // import { response } from "./utils/responses.utils.js";
 // import { operationToResponse } from "./services/validation/operations.service.js";
 
@@ -27,6 +28,9 @@ app.use("/user", routeUser);
 app.use("/conversation", routeConversation);
 app.use("/group_member", routeGroupMember);
 app.use("/message", routeMessage);
+
+//Utils routers
+app.use("/encryption", routeEncryption); //Because encryption needed to be executed in a backend environment
 
 // //General Error handler: (Prevents any crash.)
 // // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
