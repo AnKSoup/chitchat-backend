@@ -9,7 +9,10 @@ import {
   isTokenOfUser,
   isTokenValid,
 } from "../services/tokens.service.js";
-import { doesConvExist, doesUserExist } from "../services/validation/items.service.js";
+import {
+  doesConvExist,
+  doesUserExist,
+} from "../services/validation/items.service.js";
 import { isMemberInConv } from "../services/db/group_member.service.js";
 import {
   createMessage,
@@ -21,7 +24,7 @@ import {
 } from "../services/db/message.service.js";
 
 // ENDPOINTS :
-// #1- Get all messages:  GET     /message/:conversation_id REQ: {user_token, user_id, message_count, message_offset}   RES: {messages}
+// #1- Get all messages:  POST    /message/:conversation_id REQ: {user_token, user_id, message_count, message_offset}   RES: {messages}
 // #2- Write message:     POST    /message/:conversation_id REQ: {user_token, user_id, message_content, in_response_to}
 // #3- Edit message:      PUT     /message/:conversation_id REQ: {user_token, user_id, message_id, message_content}
 // #4- Delete message:    DELETE  /message/:conversation_id REQ: {user_token, user_id, message_id}
@@ -29,7 +32,7 @@ import {
 export const routeMessage = Router();
 
 //#1 GET ALL MESSAGES FROM A CONVERSATION from ... to ...
-routeMessage.get("/:conversation_id", async (req, res) => {
+routeMessage.post("/:conversation_id", async (req, res) => {
   //check if user in conv and did not left
   const member = req.body;
   const conversation_id = parseInt(req.params.conversation_id);
@@ -125,7 +128,11 @@ routeMessage.put("/:conversation_id", async (req, res) => {
   const user = isTokenOfUser(token, message.user_id);
   if (validateOperation(res, user)) return;
 
-  const result = await editMessage(message.message_id, message.message_content, message.message_tag);
+  const result = await editMessage(
+    message.message_id,
+    message.message_content,
+    message.message_tag
+  );
   operationToResponse(res, result);
 });
 

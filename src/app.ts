@@ -47,7 +47,7 @@ console.log(
     #4- Get by id:  GET     /user/:id          
     #5- Update:     PUT     /user/:id             
     #6- Delete:     DELETE  /user/:id             
-    #7- Get id:     GET     /user/get_id          
+    #7- Get id:     POST    /user/get_id          
     #8- Get b name: GET     /user/search/:username
     #9- Chang pass: PUT     /user/change_pass/:id 
 
@@ -65,7 +65,7 @@ console.log(
     #4- All conv:    GET   /group_member/conversation_of/:user_id" 
 
   4) MESSAGES :
-    // #1- Get all messages:  GET     /message/:conversation_id 
+    // #1- Get all messages:  POST    /message/:conversation_id 
     // #2- Write message:     POST    /message/:conversation_id 
     // #3- Edit message:      PUT     /message/:conversation_id 
     // #4- Delete message:    DELETE  /message/:conversation_id 

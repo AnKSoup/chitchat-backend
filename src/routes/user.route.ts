@@ -40,7 +40,7 @@ ENDPOINTS :
 #4- Get by id:  GET     /user/:id
 #5- Update:     PUT     /user/:id               REQ: {user_token, ..., !user_id, !user_password, !user_created_at}  RES: {message}
 #6- Delete:     DELETE  /user/:id               REQ: {user_token}                                                   RES: {message}
-#7- Get id:     GET     /user/get_id            REQ: {user_token}                                                   RES: {user_id|message}
+#7- Get id:     POST    /user/get_id            REQ: {user_token}                                                   RES: {user_id|message}
 #8- Get b name: GET     /user/search/:username                                                                      RES: {user_id, user_name|message}
 #9- Chang pass: PUT     /user/change_pass/:id   REQ: {user_token, user_password}                                    RES: {message}
 
@@ -158,7 +158,7 @@ routeUser.delete("/:id", async (req, res) => {
 });
 
 //#7- GET ID with token:
-routeUser.get("/get_id", async (req, res) => {
+routeUser.post("/get_id", async (req, res) => {
   const user = req.body;
 
   //Validating operations :

@@ -25,7 +25,7 @@ export async function getUser(
   conditions?: Array<string>,
   limit?: number
 ) {
-  return await getItems(columns, "User", conditions, limit);
+  return await getItems(columns, "User", conditions, undefined, limit);
 }
 
 // Creates a user with a JSON.

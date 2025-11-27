@@ -3,3 +3,4 @@
 .eslintrc.json
 chitchat.db
 node_modules
+dist

@@ -43,7 +43,7 @@ USERS:
 #4- Get by id:        GET     /user/:id                                   //                                                                  //
 #5- Update:           PUT     /user/:id                                   REQ: {user_token, ..., !user_id, !user_password, !user_created_at}  //
 #6- Delete:           DELETE  /user/:id                                   REQ: {user_token}                                                   //
-#7- Get id:           GET     /user/get_id                                REQ: {user_token}                                                   RES: {user_id}
+#7- Get id:           POST    /user/get_id                                REQ: {user_token}                                                   RES: {user_id}
 #8- Get b name:       GET     /user/search/:username                      //                                                                  RES: {user_id, user_name}
 #9- Chang pass:       PUT     /user/change_pass/:id                       REQ: {user_token, user_password}                                    //
 
@@ -61,7 +61,7 @@ GROUP MEMBERS:
 #4- All conv:         GET     /group_member/conversation_of/:user_id"     //                                                                  RES: {conversation_id}
 
 MESSAGES:
-#1- Get all messages: GET     /message/:conversation_id                   REQ: {user_token, user_id, message_count, message_offset}           RES: {messages}
+#1- Get all messages: POST    /message/:conversation_id                   REQ: {user_token, user_id, message_count, message_offset}           RES: {messages}
 #2- Write message:    POST    /message/:conversation_id                   REQ: {user_token, user_id, message_content, in_response_to}         //
 #3- Edit message:     PUT     /message/:conversation_id                   REQ: {user_token, user_id, message_id, message_content}             //
 #4- Delete message:   DELETE  /message/:conversation_id                   REQ: {user_token, user_id, message_id}                              //
