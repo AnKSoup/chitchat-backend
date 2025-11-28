@@ -32,7 +32,7 @@ import {
 export const routeMessage = Router();
 
 //#1 GET ALL MESSAGES FROM A CONVERSATION from ... to ...
-routeMessage.post("/:conversation_id", async (req, res) => {
+routeMessage.post("/get/:conversation_id", async (req, res) => {
   //check if user in conv and did not left
   const member = req.body;
   const conversation_id = parseInt(req.params.conversation_id);

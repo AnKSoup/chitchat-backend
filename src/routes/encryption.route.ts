@@ -22,6 +22,8 @@ routeEncryption.get("/key_pairs", (req, res) => {
   operationToResponse(res, result as object);
 });
 
+//IMPORTANT! After further testing those bellow work client side fortunately.bah j'ai vu que
+
 //POST encrypt/message
 routeEncryption.post("/encrypt/message", (req, res) => {
   const body = req.body;
