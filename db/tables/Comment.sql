@@ -3,6 +3,8 @@ CREATE TABLE
         comment_id INTEGER PRIMARY KEY,
         comment_content VARCHAR(255) NOT NULL,
         comment_created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        comment_modified_at DATETIME,
+        in_response_to INTEGER,
         user_id INTEGER,
         blog_id INTEGER NOT NULL,
         FOREIGN KEY (user_id) REFERENCES User (user_id) ON DELETE SET NULL,

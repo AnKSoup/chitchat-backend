@@ -9,6 +9,7 @@ import { routeGroupMember } from "./routes/group_member.route.js";
 import { routeMessage } from "./routes/message.route.js";
 import { routeEncryption } from "./routes/encryption.route.js";
 import { routeBlog } from "./routes/blog.route.js";
+import { routeComment } from "./routes/comment.route.js";
 // import { response } from "./utils/responses.utils.js";
 // import { operationToResponse } from "./services/validation/operations.service.js";
 
@@ -30,6 +31,7 @@ app.use("/conversation", routeConversation);
 app.use("/group_member", routeGroupMember);
 app.use("/message", routeMessage);
 app.use("/blog", routeBlog);
+app.use("/comment", routeComment);
 
 //Utils routers
 app.use("/encryption", routeEncryption); //Because encryption needed to be executed in a backend environment

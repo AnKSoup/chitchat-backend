@@ -26,8 +26,12 @@ export async function doesUserExist(id: number) {
   return await doesItemExist(["user_name"], "User", [`user_id = ${id}`]);
 }
 
-export async function doesConvExist(conversation_id: number) {
+export async function doesConvExist(id: number) {
   return await doesItemExist(["conversation_name"], "Conversation", [
-    `conversation_id = ${conversation_id}`,
+    `conversation_id = ${id}`,
   ]);
+}
+
+export async function doesCommentExist(id: number) {
+  return await doesItemExist(["user_id"], "Comment", [`comment_id = ${id}`]);
 }
