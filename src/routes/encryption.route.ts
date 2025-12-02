@@ -3,16 +3,16 @@
 import { Router } from "express";
 import {
   createPair,
-  decryptKey,
-  decryptMessage,
-  encryptKey,
-  encryptMessage,
+  // decryptKey,
+  // decryptMessage,
+  // encryptKey,
+  // encryptMessage,
 } from "../services/encryption/conversation_encryption.service.js";
 import {
   operationToResponse,
-  validateOperation,
+  // validateOperation,
 } from "../services/validation/operations.service.js";
-import { allowOnly } from "../services/validation/params.service.js";
+// import { allowOnly } from "../services/validation/params.service.js";
 
 export const routeEncryption = Router();
 
@@ -22,70 +22,70 @@ routeEncryption.get("/key_pairs", (req, res) => {
   operationToResponse(res, result as object);
 });
 
-//IMPORTANT! After further testing those bellow work client side fortunately.bah j'ai vu que
+//IMPORTANT! After further testing those bellow work client side fortunately.
 
-//POST encrypt/message
-routeEncryption.post("/encrypt/message", (req, res) => {
-  const body = req.body;
+// //POST encrypt/message
+// routeEncryption.post("/encrypt/message", (req, res) => {
+//   const body = req.body;
 
-  const params = allowOnly(body, ["message", "key", "iv"]);
-  if (validateOperation(res, params)) return;
+//   const params = allowOnly(body, ["message", "key", "iv"]);
+//   if (validateOperation(res, params)) return;
 
-  const result = encryptMessage(body.message, body.key, body.iv);
-  operationToResponse(res, result);
-});
+//   const result = encryptMessage(body.message, body.key, body.iv);
+//   operationToResponse(res, result);
+// });
 
-//POST decrypt/message
-routeEncryption.post("/decrypt/message", (req, res) => {
-  const body = req.body;
+// //POST decrypt/message
+// routeEncryption.post("/decrypt/message", (req, res) => {
+//   const body = req.body;
 
-  const params = allowOnly(body, ["encrypted_message", "key", "iv", "tag"]);
-  if (validateOperation(res, params)) return;
+//   const params = allowOnly(body, ["encrypted_message", "key", "iv", "tag"]);
+//   if (validateOperation(res, params)) return;
 
-  const result = decryptMessage(body.message, body.key, body.iv, body.tag);
-  operationToResponse(res, result);
-});
+//   const result = decryptMessage(body.message, body.key, body.iv, body.tag);
+//   operationToResponse(res, result);
+// });
 
-//POST encrypt/key
-routeEncryption.post("/encrypt/key", (req, res) => {
-  const body = req.body;
+// //POST encrypt/key
+// routeEncryption.post("/encrypt/key", (req, res) => {
+//   const body = req.body;
 
-  const params = allowOnly(body, ["public_key", "key"]);
-  if (validateOperation(res, params)) return;
+//   const params = allowOnly(body, ["public_key", "key"]);
+//   if (validateOperation(res, params)) return;
 
-  const result = encryptKey(body.public_key, body.key);
-  operationToResponse(res, result);
-});
+//   const result = encryptKey(body.public_key, body.key);
+//   operationToResponse(res, result);
+// });
 
-//POST decrypt/key
-routeEncryption.post("/c", (req, res) => {
-  const body = req.body;
+// //POST decrypt/key
+// routeEncryption.post("/c", (req, res) => {
+//   const body = req.body;
 
-  const params = allowOnly(body, ["private_key", "encrypted_key"]);
-  if (validateOperation(res, params)) return;
+//   const params = allowOnly(body, ["private_key", "encrypted_key"]);
+//   if (validateOperation(res, params)) return;
 
-  const result = decryptKey(body.private_key, body.encrypted_key);
-  operationToResponse(res, result);
-});
+//   const result = decryptKey(body.private_key, body.encrypted_key);
+//   operationToResponse(res, result);
+// });
 
-//POST encrypt/iv
-routeEncryption.post("/encrypt/iv", (req, res) => {
-  const body = req.body;
+// //POST encrypt/iv
+// routeEncryption.post("/encrypt/iv", (req, res) => {
+//   const body = req.body;
 
-  const params = allowOnly(body, ["public_key", "iv"]);
-  if (validateOperation(res, params)) return;
+//   const params = allowOnly(body, ["public_key", "iv"]);
+//   if (validateOperation(res, params)) return;
 
-  const result = encryptKey(body.public_key, body.iv);
-  operationToResponse(res, result);
-});
+//   const result = encryptKey(body.public_key, body.iv);
+//   operationToResponse(res, result);
+// });
 
-//POST decrypt/iv
-routeEncryption.post("/decrypt/iv", (req, res) => {
-  const body = req.body;
+// //POST decrypt/iv
+// routeEncryption.post("/decrypt/iv", (req, res) => {
+//   const body = req.body;
 
-  const params = allowOnly(body, ["private_key", "encrypted_iv"]);
-  if (validateOperation(res, params)) return;
+//   const params = allowOnly(body, ["private_key", "encrypted_iv"]);
+//   if (validateOperation(res, params)) return;
 
-  const result = decryptKey(body.private_key, body.encrypted_iv);
-  operationToResponse(res, result);
-});
+//   const result = decryptKey(body.private_key, body.encrypted_iv);
+//   operationToResponse(res, result);
+// });

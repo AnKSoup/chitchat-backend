@@ -17,8 +17,14 @@ import { isTokenOfUser, isTokenValid } from "../services/tokens.service.js";
 import { doesUserExist } from "../services/validation/items.service.js";
 
 export const routeComment = Router();
+// ENDPOINTS :
+// #1- Get comment from id:       GET     /comment/:comment_id 
+// #2- Get comments from a blog:  POST    /comment/of/:blog_id    REQ: {limit, offset}                                          RES: {comments}
+// #3- Write a comment:           POST    /comment/:blog_id       REQ: {user_id, user_token, comment_content, in_response_to}   
+// #4- Edit a comment:            PUT     /comment/:comment_id    REQ: {user_id, user_token, comment_content}                   
+// #5- Delete a comment:          DELETE  /comment/:comment_id    REQ: {user_id, user_token, blog_id}   
 
-//Get comment from id
+//#1 Get comment from id
 routeComment.get("/:comment_id", async (req, res) => {
   const id = parseInt(req.params.comment_id);
 
@@ -26,7 +32,7 @@ routeComment.get("/:comment_id", async (req, res) => {
   operationToResponse(res, result as object);
 });
 
-//Get all comments from a blog
+//#2 Get all comments from a blog
 routeComment.post("/of/:blog_id", async (req, res) => {
   const body = req.body;
   const id = parseInt(req.params.blog_id);
@@ -40,7 +46,7 @@ routeComment.post("/of/:blog_id", async (req, res) => {
   operationToResponse(res, result as object);
 });
 
-//Write a comment
+//#3 Write a comment
 routeComment.post("/:blog_id", async (req, res) => {
   const body = req.body;
   const id = parseInt(req.params.blog_id);
@@ -67,7 +73,7 @@ routeComment.post("/:blog_id", async (req, res) => {
   operationToResponse(res, result as object);
 });
 
-//Edit a comment
+//#4 Edit a comment
 routeComment.put("/:comment_id", async (req, res) => {
   const body = req.body;
   const id = parseInt(req.params.comment_id);
@@ -89,7 +95,7 @@ routeComment.put("/:comment_id", async (req, res) => {
   operationToResponse(res, result as object);
 });
 
-//Delete a comment
+//#5 Delete a comment
 routeComment.delete("/:comment_id", async (req, res) => {
   const body = req.body;
   const id = parseInt(req.params.comment_id);

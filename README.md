@@ -61,10 +61,25 @@ GROUP MEMBERS:
 #4- All conv:         GET     /group_member/conversation_of/:user_id"     //                                                                  RES: {conversation_id}
 
 MESSAGES:
-#1- Get all messages: POST    /message/get/:conversation_id                   REQ: {user_token, user_id, message_count, message_offset}           RES: {messages}
+#1- Get all messages: POST    /message/get/:conversation_id               REQ: {user_token, user_id, message_count, message_offset}           RES: {messages}
 #2- Write message:    POST    /message/:conversation_id                   REQ: {user_token, user_id, message_content, in_response_to}         //
 #3- Edit message:     PUT     /message/:conversation_id                   REQ: {user_token, user_id, message_id, message_content}             //
 #4- Delete message:   DELETE  /message/:conversation_id                   REQ: {user_token, user_id, message_id}                              //
+
+BLOGS:
+#1- Get a blog:       GET     /blog/:blog_id                              //                                                                  RES: {blog}
+#2- Create a blog:    POST    /blog/:blog_id                              REQ: {user_token}                                                   //
+#3- Edit a blog:      PUT     /blog/:blog_id                              REQ: {user_token, blog_content}                                     //
+
+COMMENTS:
+#1- comm from id:     GET     /comment/:comment_id                        //                                                                  RES: {comment}
+#2- comms from blog:  POST    /comment/of/:blog_id                        REQ: {limit, offset}                                                RES: {comments}
+#3- Write a comment:  POST    /comment/:blog_id                           REQ: {user_id, user_token, comment_content, in_response_to}         //   
+#4- Edit a comment:   PUT     /comment/:comment_id                        REQ: {user_id, user_token, comment_content}                         //
+#5- Delete a comm:    DELETE  /comment/:comment_id                        REQ: {user_id, user_token, blog_id}                                 //
+
+ENCRYPTION:
+#1- Generate keys:    GET     /encryption/key_pairs                       //                                                                  RES: {public_key, private_key}
 
 # Services :
 
@@ -160,6 +175,29 @@ MESSAGES:
   _async_ **isMessageOfId()**: Returns an IRO : Checks if the message belongs to a certain user.
   _async_ **isMessageInConv()**: Returns an IRO : Checks if a message belongs to a certain conv.
 
+  - _src/services/db/blog.service.ts_  
+  Handles communication with blog table.
+  
+  Basic CRUD:
+  _async_ **getBlog()**: Returns an IRO : "R". 
+  _async_ **createBlog()**: Returns an IRO : "C".
+  _async_ **updateBlog()**: Returns an IRO : "U".
+
+  - _src/services/db/comment.service.ts_
+  Handles communication with comment table implementing the logic needed.
+
+  Basic CRUD:
+  _async_ **getCommentById()**: Returns an IRO : "R". Within a given range.
+
+  _async_ **getComments()**: Returns an IRO : "R". Within a given range.
+  _async_ **writeComment()**: Returns an IRO : "C".
+  _async_ **editComment()**: Returns an IRO : "U".
+  _async_ **deleteComment()**: Returns an IRO : "D".
+
+  Logic:
+  _async_ **isCommentOfUser()**: Returns an IRO : Checks if the comment belongs to a certain user.
+  _async_ **isCommentOfBlog()**: Returns an IRO : Checks if a comment belongs to a certain blog.
+
 ## Encryption
 
 - _src/services/encryption/bcrypt.service.ts_
@@ -193,6 +231,7 @@ MESSAGES:
   _async_ **doesItemExist()**: Returns an IRO : Checks if an item exists.
   _async_ **doesUserExist()**: Returns an IRO : Checks if a user exists.
   _async_ **doesConvExist()**: Returns an IRO : Checks if a conversation exists.
+  _async_ **doesCommentExist()**: Returns an IRO : Checks if a comment exists.
 
 - _src/services/validation/credentials.service.ts_
   Validates credential:

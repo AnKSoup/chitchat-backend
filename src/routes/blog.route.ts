@@ -15,9 +15,9 @@ import { allowOnly } from "../services/validation/params.service.js";
 
 export const routeBlog = Router();
 // ENDPOINTS :
-// #1- Get a blog:      GET     /blog/:blog_id
-// #2- Create a blog:   POST    /blog/:blog_id
-// #3- Edit a blog:     PUT     /blog/:blog_id
+// #1- Get a blog:      GET     /blog/:blog_id  
+// #2- Create a blog:   POST    /blog/:blog_id  REQ: {user_token}
+// #3- Edit a blog:     PUT     /blog/:blog_id  REQ: {user_token, blog_content}  
 //Get
 routeBlog.get("/:blog_id", async (req, res) => {
   const id = parseInt(req.params.blog_id);
