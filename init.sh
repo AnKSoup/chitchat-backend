@@ -30,7 +30,7 @@ npm install
 ./db/scripts/encrypt
 
 # Inits .env
-printf "Enter password for the DB once again: \n"
+printf "\033[0mEnter password for the DB once again: \n"
 read -r PASSWORD
 
 {
