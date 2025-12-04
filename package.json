@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "main": "./dist/app.js",
   "scripts": {
-    "dev": "tsc -w & nodemon",
-    "test": "tsc -w & nodemon ./dist/services/db/user.service.js"
+    "dev": "tsc -w & nodemon"
   },
   "author": "",
   "license": "ISC",

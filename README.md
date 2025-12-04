@@ -31,8 +31,6 @@ detail: string,
 content?: object
 }
 
-(Internal messages where removed to use the api response template for easier returns).
-
 # ROUTES
 
 ## ENDPOINTS:
@@ -244,6 +242,7 @@ ENCRYPTION:
 
   **operationToResponse()**: Formats an IRO and sends it through the API as a response.
   **validateOperation()**: Does the same but returns true if it fails : so the endpoint can check for a fail easily and return.
+  **onlyValidate()** : onlyValidates for success without sending a response to prevent errors when checking for multiples operations
 
 - _src/services/validation/params.service.ts_
   Validates params sent to the API:

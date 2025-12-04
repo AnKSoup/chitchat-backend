@@ -41,12 +41,12 @@ export async function writeComment(blog_id: number, comment: object) {
   const user_id = getProperty("user_id", comment);
   let in_response_to = getProperty("in_response_to", comment) as unknown;
 
-  const test = doesCommentExist(in_response_to as number);
+  const test = await doesCommentExist(in_response_to as number);
 
-  if (!getSuccess(test)) {
-    return test;
-  } else if (in_response_to == 0) {
+  if (in_response_to == 0) {
     in_response_to = null;
+  } else if (!getSuccess(test)) {
+    return test;
   }
 
   const result = await createItem("Comment", {

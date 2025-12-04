@@ -9,6 +9,7 @@ import {
   writeComment,
 } from "../services/db/comment.service.js";
 import {
+  onlyValidate,
   operationToResponse,
   validateOperation,
 } from "../services/validation/operations.service.js";
@@ -18,11 +19,11 @@ import { doesUserExist } from "../services/validation/items.service.js";
 
 export const routeComment = Router();
 // ENDPOINTS :
-// #1- Get comment from id:       GET     /comment/:comment_id 
+// #1- Get comment from id:       GET     /comment/:comment_id
 // #2- Get comments from a blog:  POST    /comment/of/:blog_id    REQ: {limit, offset}                                          RES: {comments}
-// #3- Write a comment:           POST    /comment/:blog_id       REQ: {user_id, user_token, comment_content, in_response_to}   
-// #4- Edit a comment:            PUT     /comment/:comment_id    REQ: {user_id, user_token, comment_content}                   
-// #5- Delete a comment:          DELETE  /comment/:comment_id    REQ: {user_id, user_token, blog_id}   
+// #3- Write a comment:           POST    /comment/:blog_id       REQ: {user_id, user_token, comment_content, in_response_to}
+// #4- Edit a comment:            PUT     /comment/:comment_id    REQ: {user_id, user_token, comment_content}
+// #5- Delete a comment:          DELETE  /comment/:comment_id    REQ: {user_id, user_token, blog_id}
 
 //#1 Get comment from id
 routeComment.get("/:comment_id", async (req, res) => {
@@ -66,7 +67,7 @@ routeComment.post("/:blog_id", async (req, res) => {
   if (validateOperation(res, auth)) return;
 
   //does blog(user) exists response exists
-  const blog = doesUserExist(id);
+  const blog = await doesUserExist(id);
   if (validateOperation(res, blog)) return;
 
   const result = await writeComment(id, body);
@@ -113,10 +114,18 @@ routeComment.delete("/:comment_id", async (req, res) => {
   //Needs to be neither of blog owner/user to fail
   const auth = isTokenOfUser(token, body.user_id);
   const owner = isTokenOfUser(token, body.blog_id);
-  if (validateOperation(res, auth) && validateOperation(res, owner)) return;
+  if (onlyValidate(auth) && onlyValidate(owner)) {
+    validateOperation(res, auth);
+    validateOperation(res, owner);
+    return;
+  }
 
   const comment = await isCommentOfUser(id, body.user_id);
-  if (validateOperation(res, comment) && validateOperation(res, owner)) return;
+  if (onlyValidate(comment) && onlyValidate(owner)) {
+    validateOperation(res, comment);
+    validateOperation(res, owner);
+    return;
+  }
 
   const result = await deleteComment(id);
   operationToResponse(res, result as object);

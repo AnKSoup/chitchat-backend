@@ -25,7 +25,7 @@ export async function getItems(
     return iro(
       false,
       `No ${table}(s) found.`,
-      400,
+      404,
       `No ${table}(s) corresponding to query.`
     );
   }
@@ -61,7 +61,7 @@ export async function getItemsJoin(
     return iro(
       false,
       `No ${table1}(s) or ${table2}(s) found.`,
-      400,
+      404,
       `No ${table1}(s) or ${table2}(s) corresponding to query.`
     );
   }

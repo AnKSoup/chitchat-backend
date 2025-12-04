@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { allowOnly } from "../services/validation/params.service.js";
 import {
+  onlyValidate,
   operationToResponse,
   validateOperation,
 } from "../services/validation/operations.service.js";
@@ -151,15 +152,18 @@ routeMessage.delete("/:conversation_id", async (req, res) => {
   if (validateOperation(res, token)) return;
 
   //Check if token of user or token of admin and if message is of user
-  const auth = await isMessageOfId(message.message_id, message.user_id);
   const user = isTokenOfUser(token, message.user_id);
   const owner = await isTokenOfOwner(token, conversation_id);
-  if (
-    validateOperation(res, auth) &&
-    validateOperation(res, user) &&
-    validateOperation(res, owner)
-  ) {
+  if (onlyValidate(user) && onlyValidate(owner)) {
+    validateOperation(res, user);
+    validateOperation(res, owner);
     return;
+  }
+
+  const auth = await isMessageOfId(message.message_id, message.user_id);
+  if (onlyValidate(auth) && onlyValidate(user)) {
+    validateOperation(res, auth);
+    validateOperation(res, user);
   }
 
   const result = await deleteMessage(message.message_id);

@@ -8,10 +8,14 @@ import {
 } from "../services/db/group_member.service.js";
 import { allowOnly } from "../services/validation/params.service.js";
 import {
+  onlyValidate,
   operationToResponse,
   validateOperation,
 } from "../services/validation/operations.service.js";
-import { doesConvExist, doesUserExist } from "../services/validation/items.service.js";
+import {
+  doesConvExist,
+  doesUserExist,
+} from "../services/validation/items.service.js";
 
 import {
   isTokenOfOwner,
@@ -115,7 +119,9 @@ routeGroupMember.put("/leave/:conversation_id", async (req, res) => {
   //Checks if id is of user or owner
   const user = isTokenOfUser(token, member.user_id);
   const owner = await isTokenOfOwner(token, conversation_id);
-  if (validateOperation(res, user) && validateOperation(res, owner)) {
+  if (onlyValidate(user) && onlyValidate(owner)) {
+    validateOperation(res, user);
+    validateOperation(res, owner);
     return;
   }
 

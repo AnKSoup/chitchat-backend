@@ -16,6 +16,12 @@ export function validateOperation(res: any, object: object) {
   }
 }
 
+export function onlyValidate(object: object) {
+  if (!getSuccess(object)) {
+    return true;
+  }
+}
+
 //Not working since it will not prevent other object from being created before being tested
 
 // // Does the same thing in a loop.
