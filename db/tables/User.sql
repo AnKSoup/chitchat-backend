@@ -10,7 +10,7 @@ CREATE TABLE
 
 -- INDEXES:
 -- On tokens for faster validations of authed users:
-CREATE INDEX user_token_idx ON User (user_token)
+CREATE INDEX user_user_token_idx ON User (user_token)
 WHERE
     user_token IS NOT NULL;
 

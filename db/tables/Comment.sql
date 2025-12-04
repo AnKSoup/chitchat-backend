@@ -13,3 +13,8 @@ CREATE TABLE
 
 -- If user_id is NULL -> deleted user for this comment
 -- If blog gets deleted then bye bye comment :'(
+
+CREATE INDEX comment_user_id_idx ON Comment (user_id)
+WHERE
+    user_id IS NOT NULL;
+CREATE INDEX comment_blog_id ON Comment (blog_id);

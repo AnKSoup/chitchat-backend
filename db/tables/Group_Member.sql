@@ -11,3 +11,6 @@ CREATE TABLE
     );
 
 -- If user or conversation gets deleted -> delete this linker
+
+CREATE INDEX group_member_user_id_idx ON Group_Member (user_id);
+CREATE INDEX group_member_conversation_id_idx ON Group_Member (conversation_id);

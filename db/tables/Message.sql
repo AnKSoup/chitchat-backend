@@ -15,3 +15,8 @@ CREATE TABLE
 
 -- If user_id is NULL -> deleted user for this message
 -- If conversation gets deleted then bye bye message :'(
+
+CREATE INDEX message_conversation_id_idx ON Message (conversation_id);
+CREATE INDEX message_user_id_idx ON Message (user_id)
+WHERE
+    user_id IS NOT NULL;
