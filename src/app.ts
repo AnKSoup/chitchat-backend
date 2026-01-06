@@ -10,8 +10,8 @@ import { routeMessage } from "./routes/message.route.js";
 import { routeEncryption } from "./routes/encryption.route.js";
 import { routeBlog } from "./routes/blog.route.js";
 import { routeComment } from "./routes/comment.route.js";
-// import { operationToResponse } from "./services/validation/operations.service.js";
-// import { iro } from "./utils/responses.utils.js";
+import { operationToResponse } from "./services/validation/operations.service.js";
+import { iro } from "./utils/responses.utils.js";
 import { dbDump } from "./utils/dump.utils.js";
 
 // Init app:
@@ -23,16 +23,16 @@ app.listen(port, () => {
   console.log(`Server listening at ${host}:${port}`);
 });
 
-// Useless?
-// //General Error handler: (Prevents any crash.)
-// // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
-// app.use((err: any, req: any, res: any, next: any) => {
-//   const result = iro(false, "Error occurred.", 500, err.message);
-//   operationToResponse(res, result);
-// });
-
 //Middlewares;
 app.use(urlencoded({ extended: true })); //To get infos from forms.
+app.use(Express.json()); //To enable json
+
+//General Error handler: (Prevents any crash.)
+// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
+app.use((err: any, req: any, res: any, next: any) => {
+  const result = iro(false, "Error occurred.", 500, err.message);
+  operationToResponse(res, result);
+});
 
 //Routers:
 app.use("/user", routeUser);
