@@ -2,6 +2,8 @@ import Express from "express";
 import { urlencoded } from "express";
 import "dotenv/config";
 
+import cors from "cors";
+
 //Routers:
 import { routeUser } from "./routes/user.route.js";
 import { routeConversation } from "./routes/conversation.route.js";
@@ -10,6 +12,7 @@ import { routeMessage } from "./routes/message.route.js";
 import { routeEncryption } from "./routes/encryption.route.js";
 import { routeBlog } from "./routes/blog.route.js";
 import { routeComment } from "./routes/comment.route.js";
+
 import { operationToResponse } from "./services/validation/operations.service.js";
 import { iro } from "./utils/responses.utils.js";
 import { dbDump } from "./utils/dump.utils.js";
@@ -26,6 +29,8 @@ app.listen(port, () => {
 //Middlewares;
 app.use(urlencoded({ extended: true })); //To get infos from forms.
 app.use(Express.json()); //To enable json
+
+app.use(cors()); //Clients from chromium wouldn't work without this one.
 
 //General Error handler: (Prevents any crash.)
 // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
@@ -103,5 +108,5 @@ console.log(
 
   8) OTHER:
     #1- Data Dump :         GET       /data
-  `
+  `,
 );

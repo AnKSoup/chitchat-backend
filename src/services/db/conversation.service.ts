@@ -21,17 +21,19 @@ export async function getConversation(conversation_id: number) {
 export async function createConversation(conv: object) {
   //Insert it into the database
   const result = await createItem("Conversation", conv);
+
   if (getSuccess(result)) {
     //Return the key and IV
     const keys = createKeyAndIV();
-    const content = getProperty("content", keys);
+    const content = getProperty("content", keys) as unknown as object;
+    const id = getProperty("content", result) as unknown as object;
     if (getSuccess(keys) && content) {
       return iro(
         true,
         "Created conversation successfully",
         201,
         "Conversation Key and IV in content.",
-        content
+        { ...content, ...id }
       );
     } else {
       return iro(
@@ -78,6 +80,6 @@ export async function getAllMembers(conversation_id: number) {
     "User",
     "user_id",
     "user_id",
-    [`Group_Member.conversation_id = ${conversation_id}`]
+    [`Group_Member.conversation_id = ${conversation_id}`, `left_at IS NULL`]
   );
 }

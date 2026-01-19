@@ -70,12 +70,15 @@ export async function getItemsJoin(
 // Creates an item with a JSON.
 export async function createItem(table: string, item: object) {
   try {
-    await dbInsert(table, item);
+    const result = await dbInsert(table, item);
+    //This is to return its id => needed by the client sometimes.
+    const lastID = getProperty("content", result as object);
     return iro(
       true,
       `${table} created.`,
       201,
-      `${table} successfully created.`
+      `${table} successfully created.`,
+      lastID as unknown as object
     );
   } catch (error) {
     const detail = getProperty("detail", error as object) as unknown as string; //Dont worry typescript it's not null..

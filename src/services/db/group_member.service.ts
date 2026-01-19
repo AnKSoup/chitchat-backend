@@ -142,6 +142,13 @@ export async function getAllConvsOfUser(user_id: number) {
     "Conversation",
     "conversation_id",
     "conversation_id",
-    [`Group_Member.user_id = ${user_id}`]
+    [`Group_Member.user_id = ${user_id}`, `left_at IS NULL`] //To only get those where member is still present
   );
+}
+
+export async function getKeyIvOfUser(user_id: number, conversation_id: number) {
+  return await getItems(["decrypt_key", "decrypt_iv"], "Group_Member", [
+    `user_id = ${user_id}`,
+    `conversation_id = ${conversation_id}`,
+  ]);
 }

@@ -15,7 +15,8 @@ import {
 } from "../services/validation/operations.service.js";
 import { allowOnly } from "../services/validation/params.service.js";
 import { isTokenOfUser, isTokenValid } from "../services/tokens.service.js";
-import { doesUserExist } from "../services/validation/items.service.js";
+// import { doesUserExist } from "../services/validation/items.service.js";
+import { doesBlogExist } from "../services/db/blog.service.js";
 
 export const routeComment = Router();
 // ENDPOINTS :
@@ -66,8 +67,8 @@ routeComment.post("/:blog_id", async (req, res) => {
   const auth = isTokenOfUser(token, body.user_id);
   if (validateOperation(res, auth)) return;
 
-  //does blog(user) exists response exists
-  const blog = await doesUserExist(id);
+  //Need the blog to be created for posting comments
+  const blog = await doesBlogExist(id);
   if (validateOperation(res, blog)) return;
 
   const result = await writeComment(id, body);

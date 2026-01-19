@@ -5,6 +5,7 @@ CREATE TABLE
         user_password VARCHAR(255) NOT NULL,
         user_email VARCHAR(255) NOT NULL UNIQUE,
         user_token TEXT,
+        user_public_key TEXT, -- This one is needed for sharing symmetric keys 
         user_created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     );
 

@@ -40,7 +40,12 @@ export async function createUser(user: object) {
 
 // Updates user(s) with a JSON and conditions.
 export async function updateUser(user: object, conditions: Array<string>) {
-  return await updateItem("User", user, conditions);
+  const result = await updateItem("User", user, conditions);
+  const message = getProperty("detail", result) as unknown as string;
+  if (message.includes("UNIQUE constraint failed: User.user_email")) {
+    return iro(false, "Couldn't update user.", 400, "Email already in use.");
+  }
+  return result;
 }
 
 // Deletes user(s) with conditions.
@@ -186,7 +191,18 @@ export async function logoutUser(tokenResult: object) {
 }
 
 export async function getUserById(user_id: number) {
-  return await getItems(["user_name"], "User", [`user_id = ${user_id}`]);
+  return await getItems(["user_name", "user_public_key"], "User", [
+    `user_id = ${user_id}`,
+  ]);
+}
+
+//This is for logged user to get their info
+export async function getMyInfo(user_id: number) {
+  return await getItems(
+    ["user_name", "user_email", "user_created_at"],
+    "User",
+    [`user_id = ${user_id}`]
+  );
 }
 
 export async function getUserByName(user_name: string) {

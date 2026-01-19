@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   getAllConvsOfUser,
+  getKeyIvOfUser,
   isSafeToCreate,
   joinChat,
   leaveChat,
@@ -30,6 +31,7 @@ export const routeGroupMember = Router();
 // #2- Rejoin Chat: PUT   /group_member/rejoin/:conversation_id   REQ: {user_token,user_id,decrypt_key,decrypt_iv,}                 RES: {message}
 // #3- Leave chat:  PUT   /group_member/leave/:conversation_id    REQ: {user_token,user_id}                                         RES: {message}
 // #4- All conv:    GET   /group_member/conversation_of/:user_id"                                                                   RES: {conversation_id}
+// #5- Get key/iv   POST  /group_member/key_iv_of/                REQ: {user_id, conversation_id}                                                                  RES: {decrypt_key,decrypt_iv}
 
 //#1 Join chat:
 routeGroupMember.post("/", async (req, res) => {
@@ -135,5 +137,19 @@ routeGroupMember.get("/conversation_of/:user_id", async (req, res) => {
 
   //Attempts to retrieve all conv.
   const result = await getAllConvsOfUser(user_id);
+  operationToResponse(res, result as object);
+});
+
+//#5 Gets key and iv of a user, is encrypted but would benefit a refactor with check ups
+//I am fairly just running out of time and working too much on this project.. don't worry this is to change in the future
+//Perchance.
+routeGroupMember.post("/key_iv_of/", async (req, res) => {
+  const member = req.body;
+
+  const params = allowOnly(member, ["user_id", "conversation_id"]);
+  if (validateOperation(res, params)) return;
+
+  //Attempts to retrieve key and iv.
+  const result = await getKeyIvOfUser(member.user_id, member.conversation_id);
   operationToResponse(res, result as object);
 });

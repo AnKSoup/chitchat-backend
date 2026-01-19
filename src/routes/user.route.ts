@@ -17,6 +17,7 @@ import {
 import {
   changeUserPassword,
   editUser,
+  getMyInfo,
   getUserById,
   getUserByName,
   loginUser,
@@ -41,10 +42,9 @@ ENDPOINTS :
 #5- Update:     PUT     /user/:id               REQ: {user_token, ..., !user_id, !user_password, !user_created_at}  RES: {message}
 #6- Delete:     DELETE  /user/:id               REQ: {user_token}                                                   RES: {message}
 #7- Get id:     POST    /user/get_id            REQ: {user_token}                                                   RES: {user_id|message}
+#0- Get my info:POST    /user/:id               REQ: {user_token}                                                   RES: {user_name,user_email,user_created_at}
 #8- Get b name: GET     /user/search/:username                                                                      RES: {user_id, user_name|message}
 #9- Chang pass: PUT     /user/change_pass/:id   REQ: {user_token, user_password}                                    RES: {message}
-
-USELESS FOR NOW : 
 */
 
 export const routeUser = Router();
@@ -126,6 +126,11 @@ routeUser.put("/:id", async (req, res) => {
   ]);
   if (validateOperation(res, blacklist)) return;
 
+  if (user.user_email) {
+    const email = isEmailValid(user.user_email);
+    if (validateOperation(res, email)) return;
+  }
+
   const token = await isTokenValid(req.body.user_token);
   if (validateOperation(res, token)) return;
 
@@ -168,6 +173,24 @@ routeUser.post("/get_id", async (req, res) => {
   //Attempts to retrieve user_id:
   const result = await isTokenValid(req.body.user_token); //always returns user_id if it's valid.
   operationToResponse(res, result);
+});
+
+// #0- Get my info:
+routeUser.post("/:id", async (req, res) => {
+  const id = parseInt(req.params.id);
+  const user = req.body;
+
+  const params = allowOnly(user, ["user_token"]);
+  if (validateOperation(res, params)) return;
+
+  const token = await isTokenValid(req.body.user_token);
+  if (validateOperation(res, token)) return;
+
+  const auth = isTokenOfUser(token, id);
+  if (validateOperation(res, auth)) return;
+
+  const result = await getMyInfo(id);
+  operationToResponse(res, result as object);
 });
 
 //#8- GET user by name:

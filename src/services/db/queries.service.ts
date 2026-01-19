@@ -69,12 +69,16 @@ async function dbRun(
       if (object) {
         arr = Object.values(object);
       }
-      stmt.run(arr, (err) => {
+      stmt.run(arr, function (err) {
         //Rejects if error, else resolves.
         if (err) {
           reject(iro(false, "Couldn't execute query.", 500, err.message));
         } else {
-          resolve(iro(true, "Query executed.", 100, message_success));
+          resolve(
+            iro(true, "Query executed.", 100, message_success, {
+              rowid: this.lastID,
+            })
+          );
         }
       });
       stmt.finalize();
