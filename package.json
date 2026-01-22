@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "./dist/app.js",
   "scripts": {
-    "dev": "tsc -w & nodemon"
+    "dev": "tsc -w & nodemon",
+    "test": "node tests/endpoints_validator/endpoints_tester.js"
   },
   "author": "",
   "license": "ISC",
