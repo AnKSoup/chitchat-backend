@@ -28,15 +28,22 @@ async function dbUnlock(db: sqlite3.Database) {
       stmt.run((err) => {
         if (err) {
           reject(
-            iro(false, "Couldn't connect to the database.", 500, err.message)
-          );
-        } else {
-          resolve(
-            iro(true, "Connected to database.", 100, "Password is correct.")
+            iro(false, "Couldn't connect to the database.", 500, err.message),
           );
         }
       });
       stmt.finalize();
+
+      //Tries to enable the use of foreign keys for on delete cascades to work
+      db.run(`PRAGMA foreign_keys = ON;`, (err) => {
+        if (err) {
+          reject(iro(false, "Couldn't enable foreign keys.", 500, err.message));
+          return;
+        }
+        resolve(
+          iro(true, "Connected to database.", 100, "Password is correct."),
+        );
+      });
     });
   });
 }
@@ -45,7 +52,7 @@ async function dbUnlock(db: sqlite3.Database) {
 async function dbRun(
   query: string,
   object: object | undefined,
-  message_success: string
+  message_success: string,
 ) {
   //Connect to db:
   const db = dbOpen();
@@ -77,7 +84,7 @@ async function dbRun(
           resolve(
             iro(true, "Query executed.", 100, message_success, {
               rowid: this.lastID,
-            })
+            }),
           );
         }
       });
@@ -133,7 +140,7 @@ export async function dbSelect(
   conditions?: Array<string>,
   invert?: string,
   limit?: number,
-  offset?: number
+  offset?: number,
 ) {
   // Formats the query as SELECT (...) FROM ... WHERE ... AND ... LIMIT ...;
   let query = `SELECT ${columns.join(", ")} FROM ${table}`;
@@ -165,7 +172,7 @@ export async function dbSelectJoin(
   conditions?: Array<string>,
   invert?: string,
   limit?: number,
-  offset?: number
+  offset?: number,
 ) {
   // Formats the query as SELECT (table.column ...) FROM ... JOIN ... ON ...=... WHERE ... AND ... LIMIT ...;
   let query = `SELECT ${columns1
@@ -173,7 +180,7 @@ export async function dbSelectJoin(
     .join(", ")}, ${columns2
     .map((item) => `${table2}.${item}`)
     .join(
-      ", "
+      ", ",
     )} FROM ${table1} JOIN ${table2} ON ${table1}.${join1} = ${table2}.${join2}`;
   if (conditions) {
     query += ` WHERE ${conditions.join(" AND ")}`;
@@ -208,7 +215,7 @@ export async function dbInsert(table: string, object: object) {
   return await dbRun(
     query,
     object,
-    `Operation successful: added object to ${table}.`
+    `Operation successful: added object to ${table}.`,
   );
 }
 
@@ -216,7 +223,7 @@ export async function dbInsert(table: string, object: object) {
 export async function dbUpdate(
   table: string,
   object: object,
-  conditions: Array<string>
+  conditions: Array<string>,
 ) {
   // Formats the query as UPDATE ... SET ... = ?, ... WHERE ... AND ...;
   let query = `UPDATE ${table} SET `;
@@ -226,7 +233,7 @@ export async function dbUpdate(
       query += `${Object.keys(object)[i]} = ?, `;
     } else {
       query += `${Object.keys(object)[i]} = ? WHERE ${conditions.join(
-        " AND "
+        " AND ",
       )};`;
     }
   }
@@ -234,7 +241,7 @@ export async function dbUpdate(
   return await dbRun(
     query,
     object,
-    `Operation successful: updated object to ${table}.`
+    `Operation successful: updated object to ${table}.`,
   );
 }
 
@@ -244,6 +251,6 @@ export async function dbDelete(table: string, conditions: Array<string>) {
   return await dbRun(
     query,
     undefined,
-    `Operation successful: deleted object from ${table}.`
+    `Operation successful: deleted object from ${table}.`,
   );
 }

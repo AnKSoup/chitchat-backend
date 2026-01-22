@@ -50,11 +50,11 @@ app.use("/comment", routeComment);
 //Utils routers
 app.use("/encryption", routeEncryption); //Because some encryption needed to be executed in a backend environment
 
-// // THIS IS FOR TESTING DELETE THIS LATER
-// app.get("/data", async (req, res) => {
-//   const result = await dbDump();
-//   res.send(result);
-// });
+// THIS IS FOR TESTING DELETE THIS LATER
+app.get("/data", async (req, res) => {
+  const result = await dbDump();
+  res.send(result);
+});
 
 // // #ENDPOINTS (delete later, is for easier testing)
 // console.log(
