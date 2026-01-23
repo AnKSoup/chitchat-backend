@@ -72,7 +72,7 @@ export async function DeleteMessage1(conversation) {
   const testing = `Deleting message 1 in ${conversation.conversation_name}`;
   try {
     const result = await call(
-      "Delete",
+      "DELETE",
       messageRoute + conversation.conversation_id,
       {
         user_token: user1.user_token,
