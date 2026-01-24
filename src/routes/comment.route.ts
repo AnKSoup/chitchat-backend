@@ -19,12 +19,14 @@ import { isTokenOfUser, isTokenValid } from "../services/tokens.service.js";
 import { doesBlogExist } from "../services/db/blog.service.js";
 
 export const routeComment = Router();
-// ENDPOINTS :
-// #1- Get comment from id:       GET     /comment/:comment_id
-// #2- Get comments from a blog:  POST    /comment/of/:blog_id    REQ: {limit, offset}                                          RES: {comments}
-// #3- Write a comment:           POST    /comment/:blog_id       REQ: {user_id, user_token, comment_content, in_response_to}
-// #4- Edit a comment:            PUT     /comment/:comment_id    REQ: {user_id, user_token, comment_content}
-// #5- Delete a comment:          DELETE  /comment/:comment_id    REQ: {user_id, user_token, blog_id}
+/*
+ENDPOINTS :
+#1- comm from id:     GET     /comment/:comment_id                                                                                                        RES : IRO + [{"comment_id","comment_content","comment_created_at","comment_modified_at","in_response_to","user_id","blog_id"}]
+#2- comms from blog:  POST    /comment/of/:blog_id                        REQ: {"limit","offset"}                                                         RES : IRO + [{"comment_id","comment_content","comment_created_at","comment_modified_at","in_response_to","user_id","blog_id","user_name"}]
+#3- Write a comment:  POST    /comment/:blog_id                           REQ: {"user_id","user_token","comment_content","in_response_to"}                RES : IRO + {"rowid"}
+#4- Edit a comment:   PUT     /comment/:comment_id                        REQ: {"user_id","user_token","comment_content"}                                 RES : IRO
+#5- Delete a comm:    DELETE  /comment/:comment_id                        REQ: {"user_id","user_token","blog_id"}                                         RES : IRO
+*/
 
 //#1 Get comment from id
 routeComment.get("/:comment_id", async (req, res) => {

@@ -24,11 +24,13 @@ import {
   isMessageOfId,
 } from "../services/db/message.service.js";
 
-// ENDPOINTS :
-// #1- Get all messages:  POST    /message/get:conversation_id REQ: {user_token, user_id, message_count, message_offset}   RES: {messages}
-// #2- Write message:     POST    /message/:conversation_id REQ: {user_token, user_id, message_content, in_response_to}
-// #3- Edit message:      PUT     /message/:conversation_id REQ: {user_token, user_id, message_id, message_content}
-// #4- Delete message:    DELETE  /message/:conversation_id REQ: {user_token, user_id, message_id}
+/* 
+ENDPOINTS :
+#1- Get all messages: POST    /message/get/:conversation_id               REQ: {"user_token","user_id","message_count","message_offset"}                  RES : IRO + [{"message_id","message_content","message_tag","message_sent_at","message_modified_at","in_response_to","user_id","user_name"}]
+#2- Write message:    POST    /message/:conversation_id                   REQ: {"user_token","user_id","message_content","message_tag","in_response_to"}  RES : IRO + {"rowid"}
+#3- Edit message:     PUT     /message/:conversation_id                   REQ: {"user_token","user_id","message_id","message_content","message_tag"}      RES : IRO
+#4- Delete message:   DELETE  /message/:conversation_id                   REQ: {"user_token","user_id","message_id"}                                      RES : IRO
+*/
 
 export const routeMessage = Router();
 
@@ -132,7 +134,7 @@ routeMessage.put("/:conversation_id", async (req, res) => {
   const result = await editMessage(
     message.message_id,
     message.message_content,
-    message.message_tag
+    message.message_tag,
   );
   operationToResponse(res, result);
 });

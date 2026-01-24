@@ -1,6 +1,21 @@
-# DATABASE :
+# DEPENDENCIES :
+Node v25.3.0
+libcrypto 1.1
+sqlite3 v3.50.4
+sqlcipher v3.46.1
 
-(Homemade framework..)
+# OVERALL SET UP
+Setting up the project :
+
+  $ ./init.sh
+   => And follow the instruction given!
+    
+**OPTIONAL : TESTING**
+
+  $ npm run test 
+    => This will test every endpoints to ensure the server works.
+
+# DATABASE :
 
 ## Set up:
 
@@ -35,49 +50,50 @@ content?: object
 
 ## ENDPOINTS:
 USERS:
-#1- Sign in:          POST    /user/                                      REQ: {user_name, user_email, user_password}                         //
-#2- Log in:           POST    /user/login                                 REQ: {user_email, user_password}                                    RES: {user_token}
-#3- Log out:          POST    /user/logout                                REQ: {user_token}                                                   //
-#4- Get by id:        GET     /user/:id                                   //                                                                  //
-#5- Update:           PUT     /user/:id                                   REQ: {user_token, ..., !user_id, !user_password, !user_created_at}  //
-#6- Delete:           DELETE  /user/:id                                   REQ: {user_token}                                                   //
-#7- Get id:           POST    /user/get_id                                REQ: {user_token}                                                   RES: {user_id}
-#8- Get b name:       GET     /user/search/:username                      //                                                                  RES: {user_id, user_name}
-#9- Chang pass:       PUT     /user/change_pass/:id                       REQ: {user_token, user_password}                                    //
+#1-   Sign in:        POST    /user/                                      REQ: {"user_name","user_email","user_password"}                                 RES : IRO + {"rowid"}
+#2-   Log in:         POST    /user/login                                 REQ: {"user_email","user_password"}                                             RES : IRO + {"user_token"}
+#3-   Log out:        POST    /user/logout                                REQ: {"user_token"}                                                             RES : IRO 
+#4-   Get by id:      GET     /user/:id                                                                                                                   RES : IRO + {"user_id","user_name"}
+#5-   Update:         PUT     /user/:id                                   REQ: {"user_token", ..., "!user_id", "!user_password", "!user_created_at"}      RES : IRO
+#6-   Delete:         DELETE  /user/:id                                   REQ: {"user_token"}                                                             RES : IRO + {"rowid"}
+#7-   Get id:         POST    /user/get_id                                REQ: {"user_token"}                                                             RES : IRO + [{"user_id"}]
+#8-   Get my info:    POST    /user/:id                                   REQ: {"user_token"}                                                             RES : IRO + [{"user_name","user_email","user_created_at}]
+#9-   Get by name:    GET     /user/search/:username                                                                                                      RES : IRO + [{"user_id","user_name"}]
+#10-  Chang pass:     PUT     /user/change_pass/:id                       REQ: {"user_token","user_password"}                                             RES : IRO 
 
-CONVERSATIONS:
-#1- Get conv:         GET     /conversation/:id                           //                                                                  RES: {*}
-#2- Create conv:      POST    /conversation/                              REQ: {conversation_name, owner_id}                                  RES: {key, iv}
-#3- Update conv:      PUT     /conversation/:id                           REQ: {user_token, ...,  !conversation_id, !conversation_created_at} //
-#4- Delete conv:      DELETE  /conversation/:id                           REQ: {user_token}                                                   //
-#5- All members:      GET     /conversation/members_of/:conversation_id   //                                                                  //
+#1- Get conv:         GET     /conversation/:id                                                                                                           RES : IRO + [{"conversation_id","conversation_name","conversation_created_at","owner_id"}]
+#2- Create conv:      POST    /conversation/                              REQ: {"conversation_name","owner_id"}                                           RES : IRO + {"key","iv","rowid"}
+#3- Update conv:      PUT     /conversation/:id                           REQ: {"user_token", ...,  "!conversation_id", "!conversation_created_at"}       RES : IRO
+#4- Delete conv:      DELETE  /conversation/:id                           REQ: {"user_token"}                                                             RES : IRO
+#5- All members:      GET     /conversation/members_of/:conversation_id                                                                                   RES : IRO + [{"user_id","user_name"}]
 
 GROUP MEMBERS:
-#1- Join Chat:        POST    /group_member/                              REQ: {user_token,user_id,conversation_id,decrypt_key,decrypt_iv,}   //
-#2- Rejoin Chat:      PUT     /group_member/rejoin/:conversation_id       REQ: {user_token,user_id,decrypt_key,decrypt_iv,}                   //
-#3- Leave chat:       PUT     /group_member/leave/:conversation_id        REQ: {user_token,user_id}                                           //
-#4- All conv:         GET     /group_member/conversation_of/:user_id"     //                                                                  RES: {conversation_id}
+#1- Join Chat:        POST    /group_member/                              REQ: {"user_token","user_id","conversation_id","decrypt_key","decrypt_iv"}      RES : IRO + {"rowid"}
+#2- Rejoin Chat:      PUT     /group_member/rejoin/:conversation_id       REQ: {"user_token","user_id","decrypt_key","decrypt_iv"}                        RES : IRO 
+#3- Leave chat:       PUT     /group_member/leave/:conversation_id        REQ: {"user_token","user_id"}                                                   RES : IRO 
+#4- All conv:         GET     /group_member/conversation_of/:user_id                                                                                      RES : IRO + [{"conversation_id","conversation_name"}]
+#5- Get key/iv        POST    /group_member/key_iv_of/                    REQ: {"user_id","conversation_id"}                                              RES : IRO + [{"decrypt_key","decrypt_iv"}]
 
 MESSAGES:
-#1- Get all messages: POST    /message/get/:conversation_id               REQ: {user_token, user_id, message_count, message_offset}           RES: {messages}
-#2- Write message:    POST    /message/:conversation_id                   REQ: {user_token, user_id, message_content, in_response_to}         //
-#3- Edit message:     PUT     /message/:conversation_id                   REQ: {user_token, user_id, message_id, message_content}             //
-#4- Delete message:   DELETE  /message/:conversation_id                   REQ: {user_token, user_id, message_id}                              //
+#1- Get all messages: POST    /message/get/:conversation_id               REQ: {"user_token","user_id","message_count","message_offset"}                  RES : IRO + [{"message_id","message_content","message_tag","message_sent_at","message_modified_at","in_response_to","user_id","user_name"}]
+#2- Write message:    POST    /message/:conversation_id                   REQ: {"user_token","user_id","message_content","message_tag","in_response_to"}  RES : IRO + {"rowid"}
+#3- Edit message:     PUT     /message/:conversation_id                   REQ: {"user_token","user_id","message_id","message_content","message_tag"}      RES : IRO
+#4- Delete message:   DELETE  /message/:conversation_id                   REQ: {"user_token","user_id","message_id"}                                      RES : IRO
 
 BLOGS:
-#1- Get a blog:       GET     /blog/:blog_id                              //                                                                  RES: {blog}
-#2- Create a blog:    POST    /blog/:blog_id                              REQ: {user_token}                                                   //
-#3- Edit a blog:      PUT     /blog/:blog_id                              REQ: {user_token, blog_content}                                     //
+#1- Get a blog:       GET     /blog/:blog_id                                                                                                              RES : IRO + [{"blog_id","blog_content","blog_modified_at"}]
+#2- Create a blog:    POST    /blog/:blog_id                              REQ: {"user_token"}                                                             RES : IRO + {"rowid"}
+#3- Edit a blog:      PUT     /blog/:blog_id                              REQ: {"user_token","blog_content"}                                              RES : IRO 
 
 COMMENTS:
-#1- comm from id:     GET     /comment/:comment_id                        //                                                                  RES: {comment}
-#2- comms from blog:  POST    /comment/of/:blog_id                        REQ: {limit, offset}                                                RES: {comments}
-#3- Write a comment:  POST    /comment/:blog_id                           REQ: {user_id, user_token, comment_content, in_response_to}         //   
-#4- Edit a comment:   PUT     /comment/:comment_id                        REQ: {user_id, user_token, comment_content}                         //
-#5- Delete a comm:    DELETE  /comment/:comment_id                        REQ: {user_id, user_token, blog_id}                                 //
+#1- comm from id:     GET     /comment/:comment_id                                                                                                        RES : IRO + [{"comment_id","comment_content","comment_created_at","comment_modified_at","in_response_to","user_id","blog_id"}]
+#2- comms from blog:  POST    /comment/of/:blog_id                        REQ: {"limit","offset"}                                                         RES : IRO + [{"comment_id","comment_content","comment_created_at","comment_modified_at","in_response_to","user_id","blog_id","user_name"}]
+#3- Write a comment:  POST    /comment/:blog_id                           REQ: {"user_id","user_token","comment_content","in_response_to"}                RES : IRO + {"rowid"}
+#4- Edit a comment:   PUT     /comment/:comment_id                        REQ: {"user_id","user_token","comment_content"}                                 RES : IRO
+#5- Delete a comm:    DELETE  /comment/:comment_id                        REQ: {"user_id","user_token","blog_id"}                                         RES : IRO
 
 ENCRYPTION:
-#1- Generate keys:    GET     /encryption/key_pairs                       //                                                                  RES: {public_key, private_key}
+#1- Generate keys:    GET     /encryption/key_pairs                                                                                                       RES : IRO + {"publicKey","privateKey"}
 
 # Services :
 
@@ -274,3 +290,28 @@ ENCRYPTION:
   **getProperty()**: Retrieves a defined property.
   **getSuccess()**: Returns bool : Easy check for success.
   **getStatus()**: Returns number : Easy check for status.
+
+# TESTING :
+
+- _src/tests/endpoints_validator_
+  
+This file contains various .js scripts to test endpoints.
+
+- _assets/data.js_
+  Stores the testing values.
+  
+- _assets/api_caller.js_
+  Exports the call() function to call and fetch data from endpoints 
+  
+- _assets/result_formatter.js_
+  Calls each function from the routes and formats the response sent to :
+  
+- _/endpoints_tester.js_
+  Which then writes it in the result.txt file upon completion.
+  
+# TODO :
+
+This section serves as a form of planning for the futur of this project :
+  
+  - Fix endpoints sending arrays of object where only one object is present.
+  - Rework the password changer

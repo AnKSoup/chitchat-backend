@@ -16,6 +16,8 @@ import {
 
 export const routeEncryption = Router();
 
+// #1- Generate keys:    GET     /encryption/key_pairs      RES : IRO + {"publicKey","privateKey"}
+
 //GET /key_pairs
 routeEncryption.get("/key_pairs", (req, res) => {
   const result = createPair();

@@ -19,12 +19,14 @@ import { doesUserExist } from "../services/validation/items.service.js";
 import { isTokenOfOwner, isTokenValid } from "../services/tokens.service.js";
 
 export const routeConversation = Router();
-// ENDPOINTS :
-// #1- Get conv:      GET     /conversation/:id   RES: {*}
-// #2- Create conv:   POST    /conversation/      REQ: {conversation_name, owner_id}                                  RES: {key, iv}
-// #3- Update conv:   PUT     /conversation/:id   REQ: {user_token, ...,  !conversation_id, !conversation_created_at} RES: {message}
-// #4- Delete conv:   DELETE  /conversation/:id   REQ: {user_token}                                                   RES: {message}
-// #5- All members:   GET     /conversation/members_of/:conversation_id                                               RES: {user_id}
+/*
+ENDPOINTS :
+#1- Get conv:         GET     /conversation/:id                                                                                                           RES : IRO + [{"conversation_id","conversation_name","conversation_created_at","owner_id"}]
+#2- Create conv:      POST    /conversation/                              REQ: {"conversation_name","owner_id"}                                           RES : IRO + {"key","iv","rowid"}
+#3- Update conv:      PUT     /conversation/:id                           REQ: {"user_token", ...,  "!conversation_id", "!conversation_created_at"}       RES : IRO
+#4- Delete conv:      DELETE  /conversation/:id                           REQ: {"user_token"}                                                             RES : IRO
+#5- All members:      GET     /conversation/members_of/:conversation_id                                                                                   RES : IRO + [{"user_id","user_name"}]
+*/
 
 //#1- Retrieves a conversation by id:
 routeConversation.get("/:id", async (req, res) => {

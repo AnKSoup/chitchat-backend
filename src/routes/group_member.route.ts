@@ -26,12 +26,14 @@ import {
 
 export const routeGroupMember = Router();
 
+/*
 // ENDPOINTS :
-// #1- Join Chat:   POST  /group_member/                          REQ: {user_token,user_id,conversation_id,decrypt_key,decrypt_iv,} RES: {message}
-// #2- Rejoin Chat: PUT   /group_member/rejoin/:conversation_id   REQ: {user_token,user_id,decrypt_key,decrypt_iv,}                 RES: {message}
-// #3- Leave chat:  PUT   /group_member/leave/:conversation_id    REQ: {user_token,user_id}                                         RES: {message}
-// #4- All conv:    GET   /group_member/conversation_of/:user_id"                                                                   RES: {conversation_id}
-// #5- Get key/iv   POST  /group_member/key_iv_of/                REQ: {user_id, conversation_id}                                                                  RES: {decrypt_key,decrypt_iv}
+#1- Join Chat:        POST    /group_member/                              REQ: {"user_token","user_id","conversation_id","decrypt_key","decrypt_iv"}      RES : IRO + {"rowid"}
+#2- Rejoin Chat:      PUT     /group_member/rejoin/:conversation_id       REQ: {"user_token","user_id","decrypt_key","decrypt_iv"}                        RES : IRO 
+#3- Leave chat:       PUT     /group_member/leave/:conversation_id        REQ: {"user_token","user_id"}                                                   RES : IRO 
+#4- All conv:         GET     /group_member/conversation_of/:user_id                                                                                      RES : IRO + [{"conversation_id","conversation_name"}]
+#5- Get key/iv        POST    /group_member/key_iv_of/                    REQ: {"user_id","conversation_id"}                                              RES : IRO + [{"decrypt_key","decrypt_iv"}]
+*/
 
 //#1 Join chat:
 routeGroupMember.post("/", async (req, res) => {

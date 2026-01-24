@@ -14,11 +14,14 @@ import { isTokenOfUser, isTokenValid } from "../services/tokens.service.js";
 import { allowOnly } from "../services/validation/params.service.js";
 
 export const routeBlog = Router();
-// ENDPOINTS :
-// #1- Get a blog:      GET     /blog/:blog_id
-// #2- Create a blog:   POST    /blog/:blog_id  REQ: {user_token}
-// #3- Edit a blog:     PUT     /blog/:blog_id  REQ: {user_token, blog_content}
-//Get
+/* 
+ENDPOINTS :
+#1- Get a blog:       GET     /blog/:blog_id                                                                                                              RES : IRO + [{"blog_id","blog_content","blog_modified_at"}]
+#2- Create a blog:    POST    /blog/:blog_id                              REQ: {"user_token"}                                                             RES : IRO + {"rowid"}
+#3- Edit a blog:      PUT     /blog/:blog_id                              REQ: {"user_token","blog_content"}                                              RES : IRO 
+*/
+
+//1 Get
 routeBlog.get("/:blog_id", async (req, res) => {
   const id = parseInt(req.params.blog_id);
 
@@ -26,7 +29,7 @@ routeBlog.get("/:blog_id", async (req, res) => {
   operationToResponse(res, result as object);
 });
 
-//Create : Happens only once per user because unique blog per user
+//2 Create : Happens only once per user because unique blog per user
 routeBlog.post("/:blog_id", async (req, res) => {
   const id = parseInt(req.params.blog_id);
   const body = req.body;
@@ -44,7 +47,7 @@ routeBlog.post("/:blog_id", async (req, res) => {
   operationToResponse(res, result as object);
 });
 
-//Update
+//3 Update
 routeBlog.put("/:blog_id", async (req, res) => {
   const id = parseInt(req.params.blog_id);
   const body = req.body;
