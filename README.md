@@ -8,7 +8,7 @@ sqlcipher v3.46.1
 Setting up the project :
 
   $ ./init.sh
-   => And follow the instruction given!
+   => And follow the instructions given!
     
 **OPTIONAL : TESTING**
 
